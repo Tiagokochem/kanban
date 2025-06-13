@@ -2,22 +2,53 @@
 
 namespace Database\Seeders;
 
+use App\Models\Board;
+use App\Models\Category;
+use App\Models\Task;
 use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        // Cria 2 usuários
+        $user1 = User::create([
+            'name' => 'Tiago',
+            'email' => 'tiago@email.com',
+            'password' => bcrypt('password'),
         ]);
+
+        $user2 = User::create([
+            'name' => 'Outro Usuario',
+            'email' => 'outro@email.com',
+            'password' => bcrypt('password'),
+        ]);
+
+        // Para cada usuário cria um board
+        foreach ([$user1, $user2] as $user) {
+            $board = $user->boards()->create([
+                'title' => 'Board de ' . $user->name,
+            ]);
+
+            // Cria 3 categorias padrão
+            $categories = ['To Do', 'Doing', 'Done'];
+
+            foreach ($categories as $index => $catName) {
+                $category = $board->categories()->create([
+                    'name' => $catName,
+                    'order' => $index,
+                ]);
+
+                // Cria 5 tasks em cada categoria
+                for ($i = 1; $i <= 5; $i++) {
+                    $category->tasks()->create([
+                        'title' => "Task $i em $catName",
+                        'description' => "Descrição da task $i na categoria $catName",
+                        'order' => $i,
+                    ]);
+                }
+            }
+        }
     }
 }
