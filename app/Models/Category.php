@@ -20,4 +20,5 @@ class Category extends Model
     {
         return $this->hasMany(Task::class)->orderBy('order');
     }
+
 }
