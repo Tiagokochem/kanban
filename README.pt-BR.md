@@ -162,6 +162,8 @@ A aplicação segue uma estrutura padrão de projeto Laravel com os seguintes co
 - Adicionar, editar e excluir categorias dentro dos quadros
 - Criar, atualizar e excluir tarefas
 - Funcionalidade de arrastar e soltar para tarefas entre categorias
+- Interações baseadas em AJAX sem recarregamento de página
+- Atualizações em tempo real usando requisições assíncronas
 - Design responsivo com Tailwind CSS
 
 ## Contribuindo

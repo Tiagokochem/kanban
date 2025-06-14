@@ -162,6 +162,8 @@ The application follows a standard Laravel project structure with the following 
 - Add, edit, and delete categories within boards
 - Create, update, and delete tasks
 - Drag and drop functionality for tasks between categories
+- AJAX-powered interactions with no page refreshes
+- Real-time updates using asynchronous requests
 - Responsive design with Tailwind CSS
 
 ## Contributing
