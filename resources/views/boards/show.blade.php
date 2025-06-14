@@ -136,6 +136,38 @@
         </div>
     </div>
 </div>
+
+{{-- Modal para editar categoria --}}
+<div class="modal fade" id="editCategoryModal" tabindex="-1" aria-labelledby="editCategoryModalLabel" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="editCategoryForm">
+                <input type="hidden" id="editCategoryId">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editCategoryModalLabel">Editar Coluna</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar" id="closeEditCategoryModalBtn"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="editCategoryName" class="form-label">Nome da Coluna</label>
+                        <input type="text" class="form-control" id="editCategoryName" name="name" required>
+                    </div>
+                </div>
+                <div class="modal-footer d-flex justify-content-between">
+                    <button type="button" class="btn btn-danger btn-sm" id="deleteCategoryBtn">
+                        <i class="bi bi-trash"></i> Excluir
+                    </button>
+                    <div>
+                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" id="cancelEditCategoryBtn">Cancelar</button>
+                        <button type="submit" class="btn btn-primary btn-sm" id="submitEditCategoryBtn">
+                            <i class="bi bi-save"></i> Salvar
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 @endsection
 
 
@@ -177,6 +209,9 @@
         const editTaskModalElement = document.getElementById('editTaskModal');
         const editTaskModal = new bootstrap.Modal(editTaskModalElement, modalOptions);
         
+        const editCategoryModalElement = document.getElementById('editCategoryModal');
+        const editCategoryModal = new bootstrap.Modal(editCategoryModalElement, modalOptions);
+        
         // Botões para fechar os modais
         $('#closeCategoryModalBtn, #cancelCategoryBtn').on('click', function() {
             // Remover foco antes de fechar
@@ -199,6 +234,14 @@
             $(this).blur();
             setTimeout(function() {
                 editTaskModal.hide();
+            }, 100);
+        });
+        
+        $('#closeEditCategoryModalBtn, #cancelEditCategoryBtn').on('click', function() {
+            // Remover foco antes de fechar
+            $(this).blur();
+            setTimeout(function() {
+                editCategoryModal.hide();
             }, 100);
         });
         
@@ -270,9 +313,14 @@
                             <div class="card shadow-sm border-0 h-100">
                                 <div class="card-header bg-primary text-white fw-semibold d-flex justify-content-between align-items-center">
                                     ${category.name}
-                                    <button class="btn btn-light btn-sm task-add-btn" data-category-id="${category.id}" title="Nova Tarefa">
-                                        <i class="bi bi-plus-lg"></i>
-                                    </button>
+                                    <div>
+                                        <button class="btn btn-light btn-sm category-edit-btn me-1" data-category-id="${category.id}" title="Editar Coluna">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                        <button class="btn btn-light btn-sm task-add-btn" data-category-id="${category.id}" title="Nova Tarefa">
+                                            <i class="bi bi-plus-lg"></i>
+                                        </button>
+                                    </div>
                                 </div>
                                 <div class="card-body">
                                     <ul class="list-group task-list" id="category-${category.id}" data-category-id="${category.id}">
@@ -292,6 +340,12 @@
                 $('.task-add-btn').on('click', function() {
                     const categoryId = $(this).data('category-id');
                     openTaskModal(categoryId);
+                });
+                
+                // Adicionar evento aos botões de edição de categoria
+                $('.category-edit-btn').on('click', function() {
+                    const categoryId = $(this).data('category-id');
+                    openEditCategoryModal(categoryId);
                 });
             }).fail(function(error) {
                 console.error('Erro ao carregar categorias:', error);
@@ -683,6 +737,206 @@
                         
                         // Reativar o botão
                         $('#deleteTaskBtn').prop('disabled', false);
+                    }
+                });
+            }
+        });
+
+        // Função para abrir o modal de edição de categoria
+        window.openEditCategoryModal = function(categoryId) {
+            console.log('Abrindo modal de edição para categoria:', categoryId);
+            
+            // Buscar dados da categoria
+            $.get(`/api/categories/${categoryId}`, function(category) {
+                console.log('Dados da categoria recebidos:', category);
+                
+                // Preencher o formulário
+                $('#editCategoryId').val(categoryId);
+                $('#editCategoryName').val(category.name);
+                
+                // Mostrar o modal com um pequeno atraso
+                setTimeout(function() {
+                    editCategoryModal.show();
+                    
+                    // Focar no campo de nome com um pequeno atraso
+                    setTimeout(function() {
+                        $('#editCategoryName').focus();
+                    }, 200);
+                }, 100);
+            }).fail(function(error) {
+                console.error('Erro ao buscar dados da categoria:', error);
+                alert('Erro ao buscar dados da categoria.');
+            });
+        };
+
+        // Submeter edição de tarefa
+        $('#editTaskForm').on('submit', function(e) {
+            e.preventDefault();
+            console.log('Form de edição de tarefa submetido');
+            
+            // Desativar o botão de submit para evitar múltiplos envios
+            $('#submitEditTaskBtn').prop('disabled', true);
+
+            const taskId = $('#editTaskId').val();
+            const title = $('#editTaskTitle').val();
+            const description = $('#editTaskDescription').val();
+            console.log('Dados da edição:', {taskId, title, description});
+
+            // Remover o foco do botão de submit antes de fechar o modal
+            document.activeElement.blur();
+            
+            $.ajax({
+                url: `/api/tasks/${taskId}`,
+                type: 'PUT',
+                data: {
+                    title: title,
+                    description: description
+                },
+                success: function(response) {
+                    console.log('Tarefa atualizada com sucesso:', response);
+                    
+                    // Remover o foco de qualquer elemento antes de fechar o modal
+                    document.activeElement.blur();
+                    
+                    // Fechar o modal com um pequeno atraso
+                    setTimeout(function() {
+                        editTaskModal.hide();
+                        
+                        // Recarregar as tarefas da categoria à qual a tarefa pertence
+                        const categoryId = response.category_id;
+                        loadTasks(categoryId);
+                        
+                        // Reativar o botão de submit
+                        $('#submitEditTaskBtn').prop('disabled', false);
+                    }, 100);
+                },
+                error: function(error) {
+                    console.error('Erro ao atualizar tarefa:', error);
+                    alert('Erro ao atualizar tarefa');
+                    
+                    // Reativar o botão de submit
+                    $('#submitEditTaskBtn').prop('disabled', false);
+                }
+            });
+        });
+        
+        // Submeter edição de categoria
+        $('#editCategoryForm').on('submit', function(e) {
+            e.preventDefault();
+            console.log('Form de edição de categoria submetido');
+            
+            // Desativar o botão de submit para evitar múltiplos envios
+            $('#submitEditCategoryBtn').prop('disabled', true);
+
+            const categoryId = $('#editCategoryId').val();
+            const name = $('#editCategoryName').val();
+            console.log('Dados da edição:', {categoryId, name});
+
+            // Remover o foco do botão de submit antes de fechar o modal
+            document.activeElement.blur();
+            
+            $.ajax({
+                url: `/api/categories/${categoryId}`,
+                type: 'PUT',
+                data: {
+                    name: name
+                },
+                success: function(response) {
+                    console.log('Categoria atualizada com sucesso:', response);
+                    
+                    // Remover o foco de qualquer elemento antes de fechar o modal
+                    document.activeElement.blur();
+                    
+                    // Fechar o modal com um pequeno atraso
+                    setTimeout(function() {
+                        editCategoryModal.hide();
+                        
+                        // Recarregar todas as categorias
+                        loadCategories();
+                        
+                        // Reativar o botão de submit
+                        $('#submitEditCategoryBtn').prop('disabled', false);
+                    }, 100);
+                },
+                error: function(error) {
+                    console.error('Erro ao atualizar categoria:', error);
+                    alert('Erro ao atualizar categoria');
+                    
+                    // Reativar o botão de submit
+                    $('#submitEditCategoryBtn').prop('disabled', false);
+                }
+            });
+        });
+
+        // Excluir tarefa
+        $('#deleteTaskBtn').on('click', function() {
+            const taskId = $('#editTaskId').val();
+            console.log('Excluindo tarefa:', taskId);
+            
+            if (confirm('Tem certeza que deseja excluir esta tarefa? Esta ação não pode ser desfeita.')) {
+                // Desativar o botão para evitar múltiplos cliques
+                $(this).prop('disabled', true);
+                
+                $.ajax({
+                    url: `/api/tasks/${taskId}`,
+                    type: 'DELETE',
+                    success: function() {
+                        console.log('Tarefa excluída com sucesso');
+                        
+                        // Fechar o modal com um pequeno atraso
+                        setTimeout(function() {
+                            editTaskModal.hide();
+                            
+                            // Recarregar todas as categorias para garantir que tudo esteja atualizado
+                            loadCategories();
+                            
+                            // Reativar o botão
+                            $('#deleteTaskBtn').prop('disabled', false);
+                        }, 100);
+                    },
+                    error: function(error) {
+                        console.error('Erro ao excluir tarefa:', error);
+                        alert('Erro ao excluir tarefa');
+                        
+                        // Reativar o botão
+                        $('#deleteTaskBtn').prop('disabled', false);
+                    }
+                });
+            }
+        });
+        
+        // Excluir categoria
+        $('#deleteCategoryBtn').on('click', function() {
+            const categoryId = $('#editCategoryId').val();
+            console.log('Excluindo categoria:', categoryId);
+            
+            if (confirm('Tem certeza que deseja excluir esta coluna? Todas as tarefas nela contidas também serão excluídas. Esta ação não pode ser desfeita.')) {
+                // Desativar o botão para evitar múltiplos cliques
+                $(this).prop('disabled', true);
+                
+                $.ajax({
+                    url: `/api/categories/${categoryId}`,
+                    type: 'DELETE',
+                    success: function() {
+                        console.log('Categoria excluída com sucesso');
+                        
+                        // Fechar o modal com um pequeno atraso
+                        setTimeout(function() {
+                            editCategoryModal.hide();
+                            
+                            // Recarregar todas as categorias
+                            loadCategories();
+                            
+                            // Reativar o botão
+                            $('#deleteCategoryBtn').prop('disabled', false);
+                        }, 100);
+                    },
+                    error: function(error) {
+                        console.error('Erro ao excluir categoria:', error);
+                        alert('Erro ao excluir categoria');
+                        
+                        // Reativar o botão
+                        $('#deleteCategoryBtn').prop('disabled', false);
                     }
                 });
             }

@@ -27,6 +27,16 @@ class CategoryController extends Controller
     }
 
     /**
+     * Mostrar uma categoria específica.
+     */
+    public function show(Category $category)
+    {
+        $this->authorize('view', $category->board);
+
+        return $category;
+    }
+
+    /**
      * Criar uma nova categoria (coluna) no board.
      */
     public function store(Request $request, Board $board)
