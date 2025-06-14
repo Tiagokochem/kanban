@@ -2,6 +2,8 @@
 
 A modern Kanban board application built with Laravel, Alpine.js, and Tailwind CSS. This project allows users to create boards, categories, and tasks to manage their workflow efficiently.
 
+*Read this in other languages: [Português](README.pt-BR.md)*
+
 ## Table of Contents
 
 - [Requirements](#requirements)
