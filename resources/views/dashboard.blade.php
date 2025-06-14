@@ -2,6 +2,63 @@
 
 @section('content')
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 dark:bg-gray-900">
+        <!-- Estilos personalizados para o tema escuro -->
+        <style>
+            /* Estilos para o tema escuro */
+            .dark .modal-content {
+                background-color: #111827 !important;
+            }
+            .dark .modal-body {
+                background-color: #111827 !important;
+            }
+            .dark .modal-content * {
+                background-color: #111827 !important;
+            }
+            .dark .modal-content input {
+                background-color: #374151 !important;
+                color: white !important;
+            }
+            .dark .modal-footer {
+                background-color: #1f2937 !important;
+            }
+            .dark .modal-content h3 {
+                color: white !important;
+            }
+            .dark .modal-content label {
+                color: white !important;
+            }
+            .dark .modal-content p {
+                color: #d1d5db !important;
+            }
+            
+            /* Garantir que o tema claro funcione corretamente */
+            .modal-content {
+                background-color: #ffffff !important;
+            }
+            .modal-body {
+                background-color: #ffffff !important;
+            }
+            .modal-content .bg-white {
+                background-color: #ffffff !important;
+            }
+            .modal-content input {
+                background-color: #ffffff !important;
+                color: #111827 !important;
+            }
+            .modal-footer {
+                background-color: #f9fafb !important;
+            }
+            .modal-content h3 {
+                color: #111827 !important;
+            }
+            .modal-content label {
+                color: #111827 !important;
+            }
+            .modal-content p {
+                color: #4b5563 !important;
+            }
+        </style>
+        
         <!-- Header com título e botões -->
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Meus Quadros</h1>
@@ -89,14 +146,14 @@
     </div>
 
     <!-- Modal de criação de quadro -->
-    <div id="createBoardModal" class="fixed inset-0 z-50 hidden overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div id="createBoardModal" class="fixed inset-0 z-50 hidden overflow-y-auto dark:bg-gray-900/20" aria-labelledby="modal-title" role="dialog" aria-modal="true">
         <div class="flex items-center justify-center min-h-screen p-4">
             <!-- Overlay de fundo -->
-            <div class="fixed inset-0 bg-gray-500 dark:bg-gray-900 bg-opacity-75 dark:bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+            <div class="fixed inset-0 bg-gray-500 dark:bg-gray-900 bg-opacity-75 dark:bg-opacity-90 transition-opacity backdrop-blur-sm" aria-hidden="true"></div>
             
             <!-- Conteúdo do modal -->
-            <div class="relative inline-block align-bottom bg-white dark:bg-gray-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:align-middle sm:max-w-lg sm:w-full">
-                <div class="px-4 pt-5 pb-4 sm:p-6 sm:pb-4 bg-white dark:bg-gray-800">
+            <div class="relative inline-block align-bottom bg-white dark:bg-gray-900 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:align-middle sm:max-w-lg sm:w-full border border-gray-200 dark:border-gray-700 modal-content">
+                <div class="px-4 pt-5 pb-4 sm:p-6 sm:pb-4 bg-white dark:bg-gray-900 modal-body">
                     <div class="sm:flex sm:items-start">
                         <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
                             <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white" id="modal-title">
@@ -122,7 +179,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse bg-gray-50 dark:bg-gray-700 border-t border-gray-200 dark:border-gray-600">
+                <div class="px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse bg-gray-50 dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 modal-footer">
                     <button type="button" id="submitCreateBoard" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm transition-colors duration-150">
                         Criar Quadro
                     </button>
@@ -135,14 +192,14 @@
     </div>
     
     <!-- Modal de edição de quadro -->
-    <div id="editBoardModal" class="fixed inset-0 z-50 hidden overflow-y-auto" aria-labelledby="modal-title-edit" role="dialog" aria-modal="true">
+    <div id="editBoardModal" class="fixed inset-0 z-50 hidden overflow-y-auto dark:bg-gray-900/20" aria-labelledby="modal-title-edit" role="dialog" aria-modal="true">
         <div class="flex items-center justify-center min-h-screen p-4">
             <!-- Overlay de fundo -->
-            <div class="fixed inset-0 bg-gray-500 dark:bg-gray-900 bg-opacity-75 dark:bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+            <div class="fixed inset-0 bg-gray-500 dark:bg-gray-900 bg-opacity-75 dark:bg-opacity-90 transition-opacity backdrop-blur-sm" aria-hidden="true"></div>
             
             <!-- Conteúdo do modal -->
-            <div class="relative inline-block align-bottom bg-white dark:bg-gray-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:align-middle sm:max-w-lg sm:w-full">
-                <div class="px-4 pt-5 pb-4 sm:p-6 sm:pb-4 bg-white dark:bg-gray-800">
+            <div class="relative inline-block align-bottom bg-white dark:bg-gray-900 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:align-middle sm:max-w-lg sm:w-full border border-gray-200 dark:border-gray-700 modal-content">
+                <div class="px-4 pt-5 pb-4 sm:p-6 sm:pb-4 bg-white dark:bg-gray-900 modal-body">
                     <div class="sm:flex sm:items-start">
                         <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
                             <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white" id="modal-title-edit">
@@ -152,7 +209,7 @@
                                 <form id="editBoardForm" method="POST">
                                     @csrf
                                     @method('PUT')
-                                    <div class="mb-4">
+                                    <div class="mb-4 bg-white dark:bg-gray-900">
                                         <label for="edit_title" class="block text-base font-medium text-gray-800 dark:text-white mb-2">
                                             Título do Quadro
                                         </label>
@@ -168,7 +225,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse bg-gray-50 dark:bg-gray-700 border-t border-gray-200 dark:border-gray-600">
+                <div class="px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse bg-gray-50 dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 modal-footer">
                     <button type="button" id="submitEditBoard" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm transition-colors duration-150">
                         Salvar Alterações
                     </button>
@@ -181,14 +238,14 @@
     </div>
     
     <!-- Modal de confirmação de exclusão -->
-    <div id="deleteBoardModal" class="fixed inset-0 z-50 hidden overflow-y-auto" aria-labelledby="modal-title-delete" role="dialog" aria-modal="true">
+    <div id="deleteBoardModal" class="fixed inset-0 z-50 hidden overflow-y-auto dark:bg-gray-900/20" aria-labelledby="modal-title-delete" role="dialog" aria-modal="true">
         <div class="flex items-center justify-center min-h-screen p-4">
             <!-- Overlay de fundo -->
-            <div class="fixed inset-0 bg-gray-500 dark:bg-gray-900 bg-opacity-75 dark:bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+            <div class="fixed inset-0 bg-gray-500 dark:bg-gray-900 bg-opacity-75 dark:bg-opacity-90 transition-opacity backdrop-blur-sm" aria-hidden="true"></div>
             
             <!-- Conteúdo do modal -->
-            <div class="relative inline-block align-bottom bg-white dark:bg-gray-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:align-middle sm:max-w-lg sm:w-full">
-                <div class="px-4 pt-5 pb-4 sm:p-6 sm:pb-4 bg-white dark:bg-gray-800">
+            <div class="relative inline-block align-bottom bg-white dark:bg-gray-900 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:align-middle sm:max-w-lg sm:w-full border border-gray-200 dark:border-gray-700 modal-content">
+                <div class="px-4 pt-5 pb-4 sm:p-6 sm:pb-4 bg-white dark:bg-gray-900 modal-body">
                     <div class="sm:flex sm:items-start">
                         <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 dark:bg-red-900 sm:mx-0 sm:h-10 sm:w-10">
                             <svg class="h-6 w-6 text-red-600 dark:text-red-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
@@ -207,7 +264,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse bg-gray-50 dark:bg-gray-700 border-t border-gray-200 dark:border-gray-600">
+                <div class="px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse bg-gray-50 dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 modal-footer">
                     <form id="deleteBoardForm" method="POST">
                         @csrf
                         @method('DELETE')
@@ -232,19 +289,39 @@
             <!-- Conteúdo do modal -->
             <div class="relative inline-block align-bottom bg-white dark:bg-gray-800 rounded-xl text-left overflow-hidden shadow-2xl transform transition-all sm:align-middle sm:max-w-xl sm:w-full border border-gray-200 dark:border-gray-700">
                 <!-- Header do modal -->
-                <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-600 to-indigo-700 dark:from-blue-800 dark:to-indigo-900">
-                    <div class="flex justify-between items-center">
+                <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-gray-900 to-blue-900 dark:from-black dark:to-blue-950 relative overflow-hidden">
+                    <!-- Decorative AI pattern background -->
+                    <div class="absolute inset-0 opacity-10">
+                        <div class="absolute left-4 top-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-300" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+                            </svg>
+                        </div>
+                        <div class="absolute right-8 bottom-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-300" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <circle cx="12" cy="12" r="10" stroke-width="1" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 8v8m-4-4h8" />
+                            </svg>
+                        </div>
+                        <div class="absolute right-20 top-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-purple-300" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            </svg>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-between items-center relative z-10">
                         <div class="flex items-center">
-                            <div class="flex-shrink-0 bg-white bg-opacity-20 rounded-full p-2 mr-3">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                            <div class="flex-shrink-0 bg-gradient-to-br from-blue-400 to-indigo-500 rounded-full p-2 mr-3 shadow-lg">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
                                 </svg>
                             </div>
                             <h3 class="text-xl font-bold text-white" id="modal-title-ai-chat">
                                 Assistente Kanban AI
                             </h3>
                         </div>
-                        <button type="button" id="closeAiChatModal" class="rounded-full p-1.5 bg-white bg-opacity-20 hover:bg-opacity-30 text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-600 transition-colors duration-150">
+                        <button type="button" id="closeAiChatModal" class="rounded-full p-1.5 bg-blue-500 bg-opacity-20 hover:bg-opacity-30 text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-900 transition-colors duration-150">
                             <span class="sr-only">Fechar</span>
                             <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -253,8 +330,8 @@
                     </div>
                 </div>
                 
-                <div class="p-6 bg-white dark:bg-gray-800">
-                    <p class="text-sm text-gray-600 dark:text-gray-300 mb-4 italic">
+                <div class="p-6 bg-gray-50 dark:bg-gray-900">
+                    <p class="text-sm text-gray-600 dark:text-blue-200 mb-4 italic font-medium">
                         Descreva seu projeto e tarefas para que o assistente crie um quadro Kanban personalizado para você.
                     </p>
                     
@@ -267,8 +344,8 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
                                     </svg>
                                 </div>
-                                <div class="ml-3 bg-white dark:bg-gray-800 rounded-lg px-4 py-3 max-w-md shadow-sm border border-gray-100 dark:border-gray-700">
-                                    <p class="text-sm text-gray-700 dark:text-gray-200">
+                                <div class="ml-3 bg-gradient-to-r from-blue-100 to-indigo-100 dark:from-blue-600/40 dark:to-indigo-600/40 rounded-lg px-4 py-3 max-w-md shadow-sm border border-blue-200 dark:border-blue-700">
+                                    <p class="text-sm text-gray-800 dark:text-white">
                                         Olá! Descreva seu projeto e as tarefas que você precisa realizar. Eu posso ajudá-lo a criar um quadro Kanban automaticamente.
                                     </p>
                                 </div>
@@ -296,8 +373,8 @@
                     </div>
                     
                     <!-- Input de mensagem -->
-                    <div class="flex items-center bg-gray-50 dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
-                        <input type="text" id="chat-input" class="flex-1 px-4 py-3 bg-transparent border-none focus:ring-0 placeholder-gray-400 dark:placeholder-gray-500 text-gray-900 dark:text-white text-sm" placeholder="Descreva seu projeto e tarefas...">
+                    <div class="flex items-center bg-gray-50 dark:bg-blue-900/30 rounded-lg border border-gray-200 dark:border-blue-700 overflow-hidden shadow-sm">
+                        <input type="text" id="chat-input" class="flex-1 px-4 py-3 bg-transparent border-none focus:ring-0 placeholder-gray-400 dark:placeholder-blue-300/70 text-gray-900 dark:text-white text-sm" placeholder="Descreva seu projeto e tarefas...">
                         <button id="send-message" class="inline-flex items-center px-4 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-150">
                             <span class="mr-2 hidden sm:inline">Enviar</span>
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -351,11 +428,66 @@
         const aiSuggestion = document.getElementById('ai-suggestion');
         const createFromAiBtn = document.getElementById('create-from-ai');
         
+        // Aplicar tema escuro aos modais quando necessário
+        function applyDarkMode() {
+            // Verificar se o tema escuro está ativo
+            const isDarkMode = document.documentElement.classList.contains('dark');
+            
+            // Função para aplicar tema escuro a um modal
+            function applyDarkToModal(modal) {
+                const modalContent = modal.querySelector('.relative.inline-block');
+                if (modalContent) {
+                    if (isDarkMode) {
+                        // Aplicar tema escuro
+                        modalContent.style.backgroundColor = '#111827'; // bg-gray-900
+                        
+                        // Aplicar a todos os elementos internos que podem ter fundo branco
+                        const innerElements = modalContent.querySelectorAll('.bg-white');
+                        innerElements.forEach(el => {
+                            el.classList.remove('bg-white');
+                            el.classList.add('bg-gray-900');
+                        });
+                        
+                        // Aplicar ao conteúdo principal do modal
+                        const modalBody = modalContent.querySelector('.px-4.pt-5.pb-4');
+                        if (modalBody) {
+                            modalBody.style.backgroundColor = '#111827'; // bg-gray-900
+                        }
+                    } else {
+                        // Garantir tema claro
+                        modalContent.style.backgroundColor = '#ffffff';
+                        
+                        // Garantir que elementos tenham fundo branco no tema claro
+                        const darkElements = modalContent.querySelectorAll('.bg-gray-900');
+                        darkElements.forEach(el => {
+                            el.classList.remove('bg-gray-900');
+                            el.classList.add('bg-white');
+                        });
+                        
+                        // Aplicar ao conteúdo principal do modal
+                        const modalBody = modalContent.querySelector('.px-4.pt-5.pb-4');
+                        if (modalBody) {
+                            modalBody.style.backgroundColor = '#ffffff';
+                        }
+                    }
+                }
+            }
+            
+            // Aplicar tema aos modais
+            applyDarkToModal(editModal);
+            applyDarkToModal(document.getElementById('deleteBoardModal'));
+            applyDarkToModal(createModal);
+        }
+        
+        // Verificar tema ao carregar e quando mudar
+        applyDarkMode();
+        
         // Abrir modal de criação
         openCreateModalBtn.addEventListener('click', function() {
             createModal.classList.remove('hidden');
             titleInput.value = '';
             titleError.classList.add('hidden');
+            applyDarkMode(); // Aplicar tema escuro quando abrir o modal
         });
         
         // Fechar modal de criação
@@ -387,6 +519,7 @@
                 editTitleError.classList.add('hidden');
                 
                 editModal.classList.remove('hidden');
+                applyDarkMode(); // Aplicar tema escuro quando abrir o modal
             });
         });
         
@@ -405,6 +538,7 @@
                 deleteBoardName.textContent = boardTitle;
                 
                 deleteModal.classList.remove('hidden');
+                applyDarkMode(); // Aplicar tema escuro quando abrir o modal
             });
         });
         
@@ -559,6 +693,33 @@
             aiChatModal.classList.remove('hidden');
             chatInput.value = '';
             aiResponseArea.classList.add('hidden');
+            
+            // Garantir que o container de mensagens exista
+            const messagesContainer = chatMessages.querySelector('.flex.flex-col.space-y-4');
+            if (!messagesContainer) {
+                const newContainer = document.createElement('div');
+                newContainer.className = 'flex flex-col space-y-4';
+                
+                // Adicionar a mensagem inicial do assistente
+                const initialMessage = document.createElement('div');
+                initialMessage.className = 'flex items-start';
+                initialMessage.innerHTML = `
+                    <div class="flex-shrink-0 bg-gradient-to-br from-blue-500 to-indigo-600 dark:from-blue-600 dark:to-indigo-700 rounded-full p-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                        </svg>
+                    </div>
+                    <div class="ml-3 bg-gradient-to-r from-blue-100 to-indigo-100 dark:from-blue-600/40 dark:to-indigo-600/40 rounded-lg px-4 py-3 max-w-md shadow-sm border border-blue-200 dark:border-blue-700">
+                        <p class="text-sm text-gray-800 dark:text-white">
+                            Olá! Descreva seu projeto e as tarefas que você precisa realizar. Eu posso ajudá-lo a criar um quadro Kanban automaticamente.
+                        </p>
+                    </div>
+                `;
+                newContainer.appendChild(initialMessage);
+                
+                chatMessages.innerHTML = '';
+                chatMessages.appendChild(newContainer);
+            }
         });
         
         // Fechar modal de AI Chat
@@ -585,7 +746,7 @@
             chatInput.value = '';
             
             // Mostrar indicador de carregamento
-            addMessageToChat('ai', '<div class="flex items-center"><div class="animate-pulse mr-2">Pensando</div><div class="flex space-x-1"><div class="w-2 h-2 bg-green-600 dark:bg-green-400 rounded-full animate-bounce" style="animation-delay: 0ms"></div><div class="w-2 h-2 bg-green-600 dark:bg-green-400 rounded-full animate-bounce" style="animation-delay: 150ms"></div><div class="w-2 h-2 bg-green-600 dark:bg-green-400 rounded-full animate-bounce" style="animation-delay: 300ms"></div></div></div>');
+            addMessageToChat('ai', '<div class="flex items-center"><div class="animate-pulse mr-2 font-medium text-blue-700 dark:text-blue-300">Pensando</div><div class="flex space-x-1"><div class="w-2 h-2 bg-blue-600 dark:bg-blue-400 rounded-full animate-bounce" style="animation-delay: 0ms"></div><div class="w-2 h-2 bg-blue-600 dark:bg-blue-400 rounded-full animate-bounce" style="animation-delay: 150ms"></div><div class="w-2 h-2 bg-blue-600 dark:bg-blue-400 rounded-full animate-bounce" style="animation-delay: 300ms"></div></div></div>');
             
             // Enviar requisição para o servidor
             fetch('{{ route("ai-chat.message") }}', {
@@ -600,7 +761,7 @@
             .then(response => response.json())
             .then(data => {
                 // Remover indicador de carregamento (último elemento)
-                const loadingMessage = chatMessages.querySelector('.flex.flex-col.space-y-2').lastElementChild;
+                const loadingMessage = chatMessages.querySelector('.flex.flex-col.space-y-4')?.lastElementChild;
                 if (loadingMessage) {
                     loadingMessage.remove();
                 }
@@ -642,7 +803,7 @@
                 console.error('Erro:', error);
                 
                 // Remover indicador de carregamento
-                const loadingMessage = chatMessages.querySelector('.flex.flex-col.space-y-2').lastElementChild;
+                const loadingMessage = chatMessages.querySelector('.flex.flex-col.space-y-4')?.lastElementChild;
                 if (loadingMessage) {
                     loadingMessage.remove();
                 }
@@ -659,10 +820,10 @@
             
             if (sender === 'user') {
                 messageContainer.innerHTML = `
-                    <div class="ml-auto bg-blue-100 dark:bg-blue-900 rounded-lg px-4 py-2 max-w-md">
-                        <p class="text-sm text-blue-800 dark:text-blue-200">${message}</p>
+                    <div class="ml-auto bg-gradient-to-r from-indigo-100 to-purple-100 dark:from-indigo-600/40 dark:to-purple-600/40 rounded-lg px-4 py-3 max-w-md shadow-sm border border-indigo-200 dark:border-indigo-700">
+                        <p class="text-sm text-indigo-800 dark:text-white">${message}</p>
                     </div>
-                    <div class="flex-shrink-0 bg-blue-500 rounded-full p-2 ml-3">
+                    <div class="flex-shrink-0 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full p-2 ml-3 shadow-sm">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                         </svg>
@@ -670,19 +831,32 @@
                 `;
             } else {
                 messageContainer.innerHTML = `
-                    <div class="flex-shrink-0 bg-green-100 dark:bg-green-900 rounded-full p-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-600 dark:text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <div class="flex-shrink-0 bg-gradient-to-br from-blue-500 to-indigo-600 dark:from-blue-600 dark:to-indigo-700 rounded-full p-2 shadow-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
                         </svg>
                     </div>
-                    <div class="ml-3 bg-white dark:bg-gray-600 rounded-lg px-4 py-2 max-w-md">
-                        <p class="text-sm text-gray-700 dark:text-gray-200">${message}</p>
+                    <div class="ml-3 bg-gradient-to-r from-blue-100 to-indigo-100 dark:from-blue-600/40 dark:to-indigo-600/40 rounded-lg px-4 py-3 max-w-md shadow-sm border border-blue-200 dark:border-blue-700">
+                        <p class="text-sm text-gray-800 dark:text-white">${message}</p>
                     </div>
                 `;
             }
             
-            chatMessages.querySelector('.flex.flex-col.space-y-2').appendChild(messageContainer);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
+            // Verificar se o container de mensagens existe
+            const messagesContainer = chatMessages.querySelector('.flex.flex-col.space-y-4');
+            if (messagesContainer) {
+                messagesContainer.appendChild(messageContainer);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            } else {
+                console.error('Container de mensagens não encontrado');
+                // Criar o container se não existir
+                const newContainer = document.createElement('div');
+                newContainer.className = 'flex flex-col space-y-4';
+                newContainer.appendChild(messageContainer);
+                chatMessages.innerHTML = '';
+                chatMessages.appendChild(newContainer);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
         }
         
         // Enviar mensagem ao pressionar Enter
