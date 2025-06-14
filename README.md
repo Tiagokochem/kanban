@@ -13,6 +13,7 @@ A modern Kanban board application built with Laravel, Alpine.js, and Tailwind CS
 - [Running the Application](#running-the-application)
 - [Project Structure](#project-structure)
 - [Features](#features)
+- [AI Integration](#ai-integration)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -165,6 +166,19 @@ The application follows a standard Laravel project structure with the following 
 - AJAX-powered interactions with no page refreshes
 - Real-time updates using asynchronous requests
 - Responsive design with Tailwind CSS
+
+## AI Integration
+
+**Groq AI Integration for Enhanced Productivity**
+
+One of the standout features of this Kanban application is the integration with **Groq AI** for intelligent task and card creation:
+
+- **AI-Powered Task Generation**: Users can leverage Groq AI to automatically generate task descriptions and content
+- **Smart Card Creation**: The system uses Groq's advanced language model to help create well-structured cards
+- **Content Suggestions**: AI assistance for writing task descriptions and categorization
+- **Time-Saving Automation**: Reduce manual input by letting AI suggest task details based on project context
+
+This integration significantly enhances productivity by streamlining the task creation process and providing intelligent suggestions throughout the workflow.
 
 ## Contributing
 

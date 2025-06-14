@@ -13,6 +13,7 @@ Uma aplicação moderna de quadro Kanban construída com Laravel, Alpine.js e Ta
 - [Executando a Aplicação](#executando-a-aplicação)
 - [Estrutura do Projeto](#estrutura-do-projeto)
 - [Funcionalidades](#funcionalidades)
+- [Integração com IA](#integração-com-ia)
 - [Contribuindo](#contribuindo)
 - [Licença](#licença)
 
@@ -165,6 +166,19 @@ A aplicação segue uma estrutura padrão de projeto Laravel com os seguintes co
 - Interações baseadas em AJAX sem recarregamento de página
 - Atualizações em tempo real usando requisições assíncronas
 - Design responsivo com Tailwind CSS
+
+## Integração com IA
+
+**Integração com Groq IA para Produtividade Aprimorada**
+
+Um dos recursos de destaque desta aplicação Kanban é a integração com a **IA do Groq** para criação inteligente de tarefas e cartões:
+
+- **Geração de Tarefas com IA**: Os usuários podem aproveitar a IA do Groq para gerar automaticamente descrições e conteúdo de tarefas
+- **Criação Inteligente de Cartões**: O sistema utiliza o avançado modelo de linguagem do Groq para ajudar a criar cartões bem estruturados
+- **Sugestões de Conteúdo**: Assistência de IA para escrever descrições de tarefas e categorização
+- **Automação para Economia de Tempo**: Reduz a entrada manual permitindo que a IA sugira detalhes de tarefas com base no contexto do projeto
+
+Esta integração melhora significativamente a produtividade ao simplificar o processo de criação de tarefas e fornecer sugestões inteligentes durante todo o fluxo de trabalho.
 
 ## Contribuindo
 
