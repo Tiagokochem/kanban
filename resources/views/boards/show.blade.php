@@ -39,7 +39,7 @@
 @endif
 
 {{-- Área do Kanban --}}
-<div class="row" id="categories">
+<div class="row" id="categories" data-board-id="{{ $board->id }}">
     {{-- Colunas e tarefas carregadas via AJAX --}}
 </div>
 
@@ -47,7 +47,8 @@
 <div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form id="categoryForm">
+            <form id="categoryForm" action="/boards/{{ $board->id }}/categories" method="POST">
+                @csrf
                 <div class="modal-header">
                     <h5 class="modal-title" id="addCategoryModalLabel">Nova Coluna</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
@@ -104,14 +105,63 @@
 
 @section('scripts')
 <script>
-   const boardId = {{ json_encode($board->id) }};
-
-
+    // Definindo loadTasks no escopo global para poder ser acessada de qualquer lugar
+    let loadTasks;
+    
     $(document).ready(function() {
+        console.log('Document ready');
+        
+        // Configurar o CSRF token para todas as requisições AJAX
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            }
+        });
+        
+        // Pegar o ID do board do atributo data
+        const boardId = $('#categories').data('board-id');
+        console.log('Board ID:', boardId);
+        
+        // Verificar se o botão está sendo clicado
+        $('[data-bs-target="#addCategoryModal"]').on('click', function() {
+            console.log('Botão Nova Coluna clicado');
+            // Tentar abrir o modal manualmente
+            const modal = new bootstrap.Modal(document.getElementById('addCategoryModal'));
+            modal.show();
+        });
+        
+        // Verificar todos os eventos do modal
+        $('#addCategoryModal').on('show.bs.modal', function () {
+            console.log('Modal de categoria: evento show');
+        });
+        
+        $('#addCategoryModal').on('shown.bs.modal', function () {
+            console.log('Modal de categoria: evento shown');
+            // Focar no campo de nome
+            $('#categoryName').focus();
+        });
+        
+        $('#addCategoryModal').on('hide.bs.modal', function () {
+            console.log('Modal de categoria: evento hide');
+        });
+        
+        $('#addCategoryModal').on('hidden.bs.modal', function () {
+            console.log('Modal de categoria: evento hidden');
+        });
+        
+        // Verificar se o Bootstrap está disponível
+        if (typeof bootstrap !== 'undefined') {
+            console.log('Bootstrap está disponível');
+        } else {
+            console.error('Bootstrap não está disponível!');
+        }
+        
         loadCategories();
 
         function loadCategories() {
+            console.log('Carregando categorias...');
             $.get(`/api/boards/${boardId}/categories`, function(categories) {
+                console.log('Categorias recebidas:', categories);
                 $('#categories').empty();
 
                 if (categories.length === 0) {
@@ -147,11 +197,16 @@
 
                     loadTasks(category.id);
                 });
+            }).fail(function(error) {
+                console.error('Erro ao carregar categorias:', error);
             });
         }
 
-        function loadTasks(categoryId) {
+        // Definindo a função no escopo global
+        loadTasks = function(categoryId) {
+            console.log('Carregando tarefas para categoria:', categoryId);
             $.get(`/api/categories/${categoryId}/tasks`, function(tasks) {
+                console.log('Tarefas recebidas:', tasks);
                 const list = $(`#category-${categoryId}`);
                 list.empty();
 
@@ -168,33 +223,45 @@
                     `);
                     list.append(item);
                 });
+            }).fail(function(error) {
+                console.error('Erro ao carregar tarefas:', error);
             });
-        }
+        };
 
-        $('#categoryForm').submit(function(e) {
+        // Interceptar o envio do formulário tradicional para fazer via AJAX
+        $('#categoryForm').on('submit', function(e) {
             e.preventDefault();
-
-            const name = $('#categoryName').val();
-
-            $.post(`/boards/${boardId}/categories`, {
-                    name: name,
-                    _token: '{{ csrf_token() }}'
-                })
-                .done(function(response) {
+            console.log('Form de categoria submetido via evento submit');
+            
+            const form = $(this);
+            const url = form.attr('action');
+            const formData = form.serialize();
+            
+            console.log('URL:', url);
+            console.log('Form data:', formData);
+            
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: formData,
+                success: function(response) {
+                    console.log('Categoria criada com sucesso:', response);
                     const modal = bootstrap.Modal.getInstance(document.getElementById('addCategoryModal'));
                     modal.hide();
-
                     $('#categoryName').val('');
                     loadCategories();
-                })
-                .fail(function(error) {
-                    alert('Erro ao criar coluna');
-                });
+                },
+                error: function(error) {
+                    console.error('Erro ao criar coluna:', error);
+                    alert('Erro ao criar coluna. Verifique o console para detalhes.');
+                }
+            });
         });
     });
 
     // Abrir modal de nova tarefa passando categoryId
     function openTaskModal(categoryId) {
+        console.log('Abrindo modal de tarefa para categoria:', categoryId);
         $('#taskCategoryId').val(categoryId);
         $('#taskTitle').val('');
         $('#taskDescription').val('');
@@ -204,25 +271,35 @@
     // Submeter tarefa
     $('#taskForm').submit(function(e) {
         e.preventDefault();
+        console.log('Form de tarefa submetido');
 
         const categoryId = $('#taskCategoryId').val();
         const title = $('#taskTitle').val();
         const description = $('#taskDescription').val();
+        console.log('Dados da tarefa:', {categoryId, title, description});
 
-        $.post(`/categories/${categoryId}/tasks`, {
+        // Usando a rota web para criar tarefa
+        console.log('Enviando requisição para:', `/categories/${categoryId}/tasks`);
+        $.ajax({
+            url: `/categories/${categoryId}/tasks`,
+            type: 'POST',
+            data: {
                 title: title,
                 description: description,
                 _token: '{{ csrf_token() }}'
-            })
-            .done(function(response) {
+            },
+            success: function(response) {
+                console.log('Tarefa criada com sucesso:', response);
                 const taskModal = bootstrap.Modal.getInstance(document.getElementById('addTaskModal'));
                 taskModal.hide();
 
                 loadTasks(categoryId);
-            })
-            .fail(function(error) {
+            },
+            error: function(error) {
+                console.error('Erro ao criar tarefa:', error);
                 alert('Erro ao criar tarefa');
-            });
+            }
+        });
     });
 </script>
 @endsection
