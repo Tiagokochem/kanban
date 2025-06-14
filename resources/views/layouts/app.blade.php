@@ -8,35 +8,43 @@
 
     <title>{{ config('app.name', 'Kanban App') }}</title>
 
-    <!-- Bootstrap (adicionando para usar na UI) -->
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-
+    
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- jQuery (necessário para funcionalidades interativas) -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
     <!-- Sortable.js para drag and drop -->
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 
-    <!-- Tailwind (opcional, se quiser manter Breeze padrão) -->
+    <!-- Tailwind CSS -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    <!-- Estilos adicionais -->
+    <style>
+        [x-cloak] { display: none !important; }
+    </style>
 </head>
 
-<body class="bg-gray-100">
+<body class="font-sans antialiased bg-gray-50">
     @include('layouts.navigation')
 
-    <div class="container py-4">
+    <!-- Page Content -->
+    <main class="container py-6">
         @yield('content')
-    </div>
-
+    </main>
+    
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     
+    <!-- Scripts -->
     @yield('scripts')
 </body>
 
