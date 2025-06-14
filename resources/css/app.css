@@ -42,3 +42,20 @@ html.dark main {
 .dark .text-gray-900 {
     color: #f9fafb !important; /* gray-50 */
 }
+
+/* Modal styles */
+#createBoardModal {
+    z-index: 100;
+}
+
+#createBoardModal .bg-white.dark\:bg-gray-800 {
+    background-color: white;
+}
+
+.dark #createBoardModal .bg-white.dark\:bg-gray-800 {
+    background-color: #1f2937 !important; /* gray-800 */
+}
+
+.dark #createBoardModal .bg-gray-50.dark\:bg-gray-700 {
+    background-color: #374151 !important; /* gray-700 */
+}

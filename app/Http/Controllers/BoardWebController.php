@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Board;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class BoardWebController extends Controller
 {
@@ -34,6 +35,15 @@ class BoardWebController extends Controller
         ]);
 
         $board = Auth::user()->boards()->create($validated);
+
+        // Se for uma requisição AJAX, retornar JSON
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Quadro criado com sucesso!',
+                'board' => $board
+            ]);
+        }
 
         return redirect()->route('boards.show', $board)->with('success', 'Quadro criado com sucesso!');
     }
