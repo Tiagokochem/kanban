@@ -190,6 +190,13 @@ Contribuições são bem-vindas! Sinta-se à vontade para enviar um Pull Request
 4. Faça push para a branch (`git push origin feature/recurso-incrivel`)
 5. Abra um Pull Request
 
+   ![Screenshot_11](https://github.com/user-attachments/assets/936168f1-b1c0-411f-9d9f-95f5addd6622)
+   ![Screenshot_1](https://github.com/user-attachments/assets/ec2eda28-d80d-4352-86b9-48ce75d4eaa7)
+   ![Screenshot_3](https://github.com/user-attachments/assets/97d17d70-6255-4c25-bb75-4b893edcded6)
+   ![Screenshot_4](https://github.com/user-attachments/assets/b147cc6f-6c58-4e0a-a2ef-996010d8e913)
+   ![Screenshot_5](https://github.com/user-attachments/assets/0e9ae4ca-f69a-4a9f-b63c-05cf42ec2245)
+![Screenshot_6](https://github.com/user-attachments/assets/03abfff7-d8fb-46da-860a-527a0484346d)
+
 ## Licença
 
 Este projeto está licenciado sob a Licença MIT - veja o arquivo LICENSE para detalhes. 
