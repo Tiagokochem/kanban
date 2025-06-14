@@ -69,6 +69,15 @@ class BoardWebController extends Controller
 
         $board->update($validated);
 
+        // Se for uma requisição AJAX, retornar JSON
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Quadro atualizado com sucesso!',
+                'board' => $board
+            ]);
+        }
+
         return redirect()->route('boards.show', $board)->with('success', 'Quadro atualizado com sucesso!');
     }
 

@@ -35,11 +35,15 @@
                                         Abrir Kanban
                                     </a>
                                     
-                                    <a href="{{ route('boards.edit', $board) }}" class="inline-flex items-center p-2 text-sm font-medium text-gray-600 dark:text-gray-300 dark:bg-gray-700 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600">
+                                    <button 
+                                        class="edit-board-btn inline-flex items-center p-2 text-sm font-medium text-gray-600 dark:text-gray-300 dark:bg-gray-700 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600"
+                                        data-board-id="{{ $board->id }}"
+                                        data-board-title="{{ $board->title }}"
+                                    >
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                         </svg>
-                                    </a>
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -112,58 +116,139 @@
             </div>
         </div>
     </div>
+    
+    <!-- Modal de edição de quadro -->
+    <div id="editBoardModal" class="fixed inset-0 z-50 hidden overflow-y-auto" aria-labelledby="modal-title-edit" role="dialog" aria-modal="true">
+        <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <!-- Overlay de fundo -->
+            <div class="fixed inset-0 bg-gray-500 dark:bg-gray-900 bg-opacity-75 dark:bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+            
+            <!-- Truque para centralizar o modal -->
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+            
+            <!-- Conteúdo do modal -->
+            <div class="inline-block align-bottom bg-white dark:bg-gray-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                <div class="px-4 pt-5 pb-4 sm:p-6 sm:pb-4 bg-white dark:bg-gray-800">
+                    <div class="sm:flex sm:items-start">
+                        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white" id="modal-title-edit">
+                                Editar Quadro
+                            </h3>
+                            <div class="mt-4">
+                                <form id="editBoardForm" method="POST">
+                                    @csrf
+                                    @method('PUT')
+                                    <div class="mb-4">
+                                        <label for="edit_title" class="block text-base font-medium text-gray-800 dark:text-white mb-2">
+                                            Título do Quadro
+                                        </label>
+                                        <input type="text" 
+                                               class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm placeholder-gray-400 dark:placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-base" 
+                                               id="edit_title" 
+                                               name="title" 
+                                               required>
+                                        <p id="editTitleError" class="mt-2 text-sm text-red-600 dark:text-red-400 hidden"></p>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse bg-gray-50 dark:bg-gray-700 border-t border-gray-200 dark:border-gray-600">
+                    <button type="button" id="submitEditBoard" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm">
+                        Salvar Alterações
+                    </button>
+                    <button type="button" id="closeEditModal" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 dark:border-gray-600 shadow-sm px-4 py-2 bg-white dark:bg-gray-800 text-base font-medium text-gray-700 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                        Cancelar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const modal = document.getElementById('createBoardModal');
-        const openModalBtn = document.getElementById('openCreateModal');
-        const closeModalBtn = document.getElementById('closeCreateModal');
-        const submitBtn = document.getElementById('submitCreateBoard');
-        const form = document.getElementById('createBoardForm');
+        // Modal de criação
+        const createModal = document.getElementById('createBoardModal');
+        const openCreateModalBtn = document.getElementById('openCreateModal');
+        const closeCreateModalBtn = document.getElementById('closeCreateModal');
+        const submitCreateBtn = document.getElementById('submitCreateBoard');
+        const createForm = document.getElementById('createBoardForm');
         const titleInput = document.getElementById('title');
         const titleError = document.getElementById('titleError');
         
-        // Abrir modal
-        openModalBtn.addEventListener('click', function() {
-            modal.classList.remove('hidden');
+        // Modal de edição
+        const editModal = document.getElementById('editBoardModal');
+        const closeEditModalBtn = document.getElementById('closeEditModal');
+        const submitEditBtn = document.getElementById('submitEditBoard');
+        const editForm = document.getElementById('editBoardForm');
+        const editTitleInput = document.getElementById('edit_title');
+        const editTitleError = document.getElementById('editTitleError');
+        const editBtns = document.querySelectorAll('.edit-board-btn');
+        
+        // Abrir modal de criação
+        openCreateModalBtn.addEventListener('click', function() {
+            createModal.classList.remove('hidden');
             titleInput.value = '';
             titleError.classList.add('hidden');
         });
         
-        // Fechar modal
-        closeModalBtn.addEventListener('click', function() {
-            modal.classList.add('hidden');
+        // Fechar modal de criação
+        closeCreateModalBtn.addEventListener('click', function() {
+            createModal.classList.add('hidden');
         });
         
-        // Fechar modal ao clicar fora
+        // Fechar modal de criação ao clicar fora
         window.addEventListener('click', function(event) {
-            if (event.target === modal) {
-                modal.classList.add('hidden');
+            if (event.target === createModal) {
+                createModal.classList.add('hidden');
+            }
+            if (event.target === editModal) {
+                editModal.classList.add('hidden');
             }
         });
         
-        // Enviar formulário via AJAX
-        submitBtn.addEventListener('click', function() {
-            if (!form.checkValidity()) {
-                form.reportValidity();
+        // Abrir modal de edição
+        editBtns.forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                const boardId = this.getAttribute('data-board-id');
+                const boardTitle = this.getAttribute('data-board-title');
+                
+                editForm.action = `/boards/${boardId}`;
+                editTitleInput.value = boardTitle;
+                editTitleError.classList.add('hidden');
+                
+                editModal.classList.remove('hidden');
+            });
+        });
+        
+        // Fechar modal de edição
+        closeEditModalBtn.addEventListener('click', function() {
+            editModal.classList.add('hidden');
+        });
+        
+        // Enviar formulário de criação via AJAX
+        submitCreateBtn.addEventListener('click', function() {
+            if (!createForm.checkValidity()) {
+                createForm.reportValidity();
                 return;
             }
             
             // Mostrar indicador de carregamento
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Criando...';
+            submitCreateBtn.disabled = true;
+            submitCreateBtn.innerHTML = '<svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Criando...';
             
             // Usar FormData para enviar o formulário
-            const formData = new FormData(form);
+            const formData = new FormData(createForm);
             
             // Adicionar header para aceitar JSON
             const headers = new Headers();
             headers.append('X-Requested-With', 'XMLHttpRequest');
             headers.append('Accept', 'application/json');
             
-            fetch(form.action, {
+            fetch(createForm.action, {
                 method: 'POST',
                 headers: headers,
                 body: formData
@@ -178,7 +263,7 @@
                     titleError.classList.remove('hidden');
                 } else {
                     // Sucesso - fechar modal e atualizar lista
-                    modal.classList.add('hidden');
+                    createModal.classList.add('hidden');
                     
                     // Recarregar a página para mostrar o novo quadro
                     window.location.reload();
@@ -190,8 +275,59 @@
             })
             .finally(function() {
                 // Restaurar botão
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = 'Criar Quadro';
+                submitCreateBtn.disabled = false;
+                submitCreateBtn.innerHTML = 'Criar Quadro';
+            });
+        });
+        
+        // Enviar formulário de edição via AJAX
+        submitEditBtn.addEventListener('click', function() {
+            if (!editForm.checkValidity()) {
+                editForm.reportValidity();
+                return;
+            }
+            
+            // Mostrar indicador de carregamento
+            submitEditBtn.disabled = true;
+            submitEditBtn.innerHTML = '<svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Salvando...';
+            
+            // Usar FormData para enviar o formulário
+            const formData = new FormData(editForm);
+            
+            // Adicionar header para aceitar JSON
+            const headers = new Headers();
+            headers.append('X-Requested-With', 'XMLHttpRequest');
+            headers.append('Accept', 'application/json');
+            
+            fetch(editForm.action, {
+                method: 'POST',
+                headers: headers,
+                body: formData
+            })
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(data) {
+                if (data.errors) {
+                    // Mostrar erros de validação
+                    editTitleError.textContent = data.errors.title ? data.errors.title[0] : '';
+                    editTitleError.classList.remove('hidden');
+                } else {
+                    // Sucesso - fechar modal e atualizar lista
+                    editModal.classList.add('hidden');
+                    
+                    // Recarregar a página para mostrar as alterações
+                    window.location.reload();
+                }
+            })
+            .catch(function(error) {
+                console.error('Erro:', error);
+                alert('Ocorreu um erro ao editar o quadro. Tente novamente.');
+            })
+            .finally(function() {
+                // Restaurar botão
+                submitEditBtn.disabled = false;
+                submitEditBtn.innerHTML = 'Salvar Alterações';
             });
         });
     });
