@@ -4,6 +4,9 @@ A modern Kanban board application built with Laravel, Alpine.js, and Tailwind CS
 
 *Read this in other languages: [Português](README.pt-BR.md)*
 
+I made a short demo video of the app. Here’s the link:
+https://drive.google.com/file/d/1JLQaT7pAYF-e9NcJ0x5-wfEIKDl30y3f/view?usp=sharing
+
 ## Table of Contents
 
 - [Requirements](#requirements)
