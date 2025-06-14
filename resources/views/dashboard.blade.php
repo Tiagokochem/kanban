@@ -2,15 +2,23 @@
 
 @section('content')
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 dark:bg-gray-900">
-        <!-- Header com título e botão de novo quadro -->
+        <!-- Header com título e botões -->
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Meus Quadros</h1>
-            <button id="openCreateModal" class="inline-flex items-center px-5 py-2.5 bg-blue-600 hover:bg-blue-700 border border-transparent rounded-md font-medium text-sm text-white uppercase tracking-wider focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition ease-in-out duration-150 shadow-sm">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                </svg>
-                Novo Quadro
-            </button>
+            <div class="flex space-x-3">
+                <button id="openAiChatModal" class="inline-flex items-center px-5 py-2.5 bg-green-600 hover:bg-green-700 border border-transparent rounded-md font-medium text-sm text-white uppercase tracking-wider focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition ease-in-out duration-150 shadow-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                    </svg>
+                    AI Assistant
+                </button>
+                <button id="openCreateModal" class="inline-flex items-center px-5 py-2.5 bg-blue-600 hover:bg-blue-700 border border-transparent rounded-md font-medium text-sm text-white uppercase tracking-wider focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition ease-in-out duration-150 shadow-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                    </svg>
+                    Novo Quadro
+                </button>
+            </div>
         </div>
 
         <!-- Área de quadros -->
@@ -214,6 +222,84 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal de AI Chat -->
+    <div id="aiChatModal" class="fixed inset-0 z-50 hidden overflow-y-auto" aria-labelledby="modal-title-ai-chat" role="dialog" aria-modal="true">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <!-- Overlay de fundo -->
+            <div class="fixed inset-0 bg-gray-500 dark:bg-gray-900 bg-opacity-75 dark:bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+            
+            <!-- Conteúdo do modal -->
+            <div class="relative inline-block align-bottom bg-white dark:bg-gray-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:align-middle sm:max-w-lg sm:w-full">
+                <div class="absolute top-0 right-0 pt-4 pr-4">
+                    <button type="button" id="closeAiChatModal" class="bg-white dark:bg-gray-800 rounded-md text-gray-400 hover:text-gray-500 dark:hover:text-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        <span class="sr-only">Fechar</span>
+                        <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="px-4 pt-5 pb-4 sm:p-6 sm:pb-4 bg-white dark:bg-gray-800">
+                    <div class="sm:flex sm:items-start">
+                        <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-green-100 dark:bg-green-900 sm:mx-0 sm:h-10 sm:w-10">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600 dark:text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                            </svg>
+                        </div>
+                        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white" id="modal-title-ai-chat">
+                                AI Assistant
+                            </h3>
+                            <div class="mt-2">
+                                <p class="text-sm text-gray-500 dark:text-gray-300 mb-4">
+                                    Descreva seu projeto e tarefas, e o assistente AI irá ajudá-lo a criar um quadro Kanban.
+                                </p>
+                                
+                                <!-- Área de chat -->
+                                <div id="chat-messages" class="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 h-64 overflow-y-auto mb-4">
+                                    <div class="flex flex-col space-y-2">
+                                        <div class="flex items-start">
+                                            <div class="flex-shrink-0 bg-green-100 dark:bg-green-900 rounded-full p-2">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-600 dark:text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                                                </svg>
+                                            </div>
+                                            <div class="ml-3 bg-white dark:bg-gray-600 rounded-lg px-4 py-2 max-w-md">
+                                                <p class="text-sm text-gray-700 dark:text-gray-200">
+                                                    Olá! Descreva seu projeto e as tarefas que você precisa realizar. Eu posso ajudá-lo a criar um quadro Kanban automaticamente.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Área de resposta do AI -->
+                                <div id="ai-response-area" class="hidden bg-blue-50 dark:bg-blue-900/30 border-l-4 border-blue-400 dark:border-blue-500 p-3 rounded-md mb-4">
+                                    <h4 class="font-medium text-blue-800 dark:text-blue-200 mb-2">Sugestão do AI:</h4>
+                                    <div id="ai-suggestion" class="text-sm text-blue-700 dark:text-blue-100"></div>
+                                    <div class="mt-3 flex justify-end">
+                                        <button id="create-from-ai" class="inline-flex items-center px-3 py-1.5 bg-blue-600 hover:bg-blue-700 border border-transparent rounded-md font-medium text-xs text-white uppercase tracking-wider focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-150 shadow-sm">
+                                            Criar Quadro
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <!-- Input de mensagem -->
+                                <div class="flex items-center">
+                                    <input type="text" id="chat-input" class="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-l-md shadow-sm placeholder-gray-400 dark:placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm" placeholder="Descreva seu projeto e tarefas...">
+                                    <button id="send-message" class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 border border-transparent rounded-r-md font-medium text-sm text-white uppercase tracking-wider focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-150 shadow-sm">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('scripts')
@@ -244,6 +330,17 @@
         const deleteForm = document.getElementById('deleteBoardForm');
         const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
         const deleteBoardName = document.getElementById('delete-board-name');
+        
+        // Modal de AI Chat
+        const aiChatModal = document.getElementById('aiChatModal');
+        const openAiChatModalBtn = document.getElementById('openAiChatModal');
+        const closeAiChatModalBtn = document.getElementById('closeAiChatModal');
+        const chatInput = document.getElementById('chat-input');
+        const sendMessageBtn = document.getElementById('send-message');
+        const chatMessages = document.getElementById('chat-messages');
+        const aiResponseArea = document.getElementById('ai-response-area');
+        const aiSuggestion = document.getElementById('ai-suggestion');
+        const createFromAiBtn = document.getElementById('create-from-ai');
         
         // Abrir modal de criação
         openCreateModalBtn.addEventListener('click', function() {
@@ -445,6 +542,188 @@
                 // Restaurar botão
                 submitEditBtn.disabled = false;
                 submitEditBtn.innerHTML = 'Salvar Alterações';
+            });
+        });
+        
+        // Abrir modal de AI Chat
+        openAiChatModalBtn.addEventListener('click', function() {
+            aiChatModal.classList.remove('hidden');
+            chatInput.value = '';
+            aiResponseArea.classList.add('hidden');
+        });
+        
+        // Fechar modal de AI Chat
+        closeAiChatModalBtn.addEventListener('click', function() {
+            aiChatModal.classList.add('hidden');
+        });
+        
+        // Fechar modal de AI Chat ao clicar fora
+        window.addEventListener('click', function(event) {
+            if (event.target === aiChatModal) {
+                aiChatModal.classList.add('hidden');
+            }
+        });
+        
+        // Enviar mensagem para o AI
+        function sendMessage() {
+            const message = chatInput.value.trim();
+            if (!message) return;
+            
+            // Adicionar mensagem do usuário ao chat
+            addMessageToChat('user', message);
+            
+            // Limpar input
+            chatInput.value = '';
+            
+            // Mostrar indicador de carregamento
+            addMessageToChat('ai', '<div class="flex items-center"><div class="animate-pulse mr-2">Pensando</div><div class="flex space-x-1"><div class="w-2 h-2 bg-green-600 dark:bg-green-400 rounded-full animate-bounce" style="animation-delay: 0ms"></div><div class="w-2 h-2 bg-green-600 dark:bg-green-400 rounded-full animate-bounce" style="animation-delay: 150ms"></div><div class="w-2 h-2 bg-green-600 dark:bg-green-400 rounded-full animate-bounce" style="animation-delay: 300ms"></div></div></div>');
+            
+            // Enviar requisição para o servidor
+            fetch('{{ route("ai-chat.message") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({ message })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Remover indicador de carregamento (último elemento)
+                const loadingMessage = chatMessages.querySelector('.flex.flex-col.space-y-2').lastElementChild;
+                if (loadingMessage) {
+                    loadingMessage.remove();
+                }
+                
+                if (data.success) {
+                    // Mostrar resposta do AI
+                    const aiContent = data.aiResponse;
+                    
+                    // Adicionar mensagem do AI ao chat
+                    let aiMessage = "Analisei sua descrição e criei uma sugestão de quadro Kanban.";
+                    addMessageToChat('ai', aiMessage);
+                    
+                    // Mostrar área de resposta do AI
+                    aiResponseArea.classList.remove('hidden');
+                    
+                    // Formatar e mostrar sugestão
+                    let suggestionHtml = `<strong>Título do Quadro:</strong> ${aiContent.boardTitle}<br><br>`;
+                    suggestionHtml += '<strong>Tarefas:</strong><ul class="list-disc pl-5 mt-2">';
+                    
+                    aiContent.tasks.forEach(task => {
+                        suggestionHtml += `<li class="mb-1"><strong>${task.title}</strong>`;
+                        if (task.description) {
+                            suggestionHtml += `<br><span class="text-xs">${task.description}</span>`;
+                        }
+                        suggestionHtml += '</li>';
+                    });
+                    
+                    suggestionHtml += '</ul>';
+                    aiSuggestion.innerHTML = suggestionHtml;
+                    
+                    // Armazenar dados para criação
+                    createFromAiBtn.setAttribute('data-ai-response', JSON.stringify(aiContent));
+                } else {
+                    // Mostrar erro
+                    addMessageToChat('ai', 'Desculpe, ocorreu um erro ao processar sua solicitação. Por favor, tente novamente.');
+                }
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+                
+                // Remover indicador de carregamento
+                const loadingMessage = chatMessages.querySelector('.flex.flex-col.space-y-2').lastElementChild;
+                if (loadingMessage) {
+                    loadingMessage.remove();
+                }
+                
+                // Mostrar erro
+                addMessageToChat('ai', 'Desculpe, ocorreu um erro ao processar sua solicitação. Por favor, tente novamente.');
+            });
+        }
+        
+        // Adicionar mensagem ao chat
+        function addMessageToChat(sender, message) {
+            const messageContainer = document.createElement('div');
+            messageContainer.className = 'flex items-start';
+            
+            if (sender === 'user') {
+                messageContainer.innerHTML = `
+                    <div class="ml-auto bg-blue-100 dark:bg-blue-900 rounded-lg px-4 py-2 max-w-md">
+                        <p class="text-sm text-blue-800 dark:text-blue-200">${message}</p>
+                    </div>
+                    <div class="flex-shrink-0 bg-blue-500 rounded-full p-2 ml-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                    </div>
+                `;
+            } else {
+                messageContainer.innerHTML = `
+                    <div class="flex-shrink-0 bg-green-100 dark:bg-green-900 rounded-full p-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-600 dark:text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                        </svg>
+                    </div>
+                    <div class="ml-3 bg-white dark:bg-gray-600 rounded-lg px-4 py-2 max-w-md">
+                        <p class="text-sm text-gray-700 dark:text-gray-200">${message}</p>
+                    </div>
+                `;
+            }
+            
+            chatMessages.querySelector('.flex.flex-col.space-y-2').appendChild(messageContainer);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        // Enviar mensagem ao pressionar Enter
+        chatInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+        
+        // Enviar mensagem ao clicar no botão
+        sendMessageBtn.addEventListener('click', sendMessage);
+        
+        // Criar quadro a partir da resposta do AI
+        createFromAiBtn.addEventListener('click', function() {
+            const aiResponse = JSON.parse(this.getAttribute('data-ai-response'));
+            
+            // Mostrar indicador de carregamento
+            createFromAiBtn.disabled = true;
+            createFromAiBtn.innerHTML = '<svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Criando...';
+            
+            // Enviar requisição para criar o quadro
+            fetch('{{ route("ai-chat.message") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({ 
+                    message: JSON.stringify(aiResponse),
+                    create: true
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success && data.redirectUrl) {
+                    // Redirecionar para o novo quadro
+                    window.location.href = data.redirectUrl;
+                } else {
+                    // Mostrar erro
+                    alert('Ocorreu um erro ao criar o quadro. Tente novamente.');
+                    createFromAiBtn.disabled = false;
+                    createFromAiBtn.innerHTML = 'Criar Quadro';
+                }
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+                alert('Ocorreu um erro ao criar o quadro. Tente novamente.');
+                createFromAiBtn.disabled = false;
+                createFromAiBtn.innerHTML = 'Criar Quadro';
             });
         });
     });

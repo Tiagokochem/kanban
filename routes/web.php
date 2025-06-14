@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\BoardWebController;
+use App\Http\Controllers\AiChatController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -29,6 +30,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/boards/{board}', [BoardWebController::class, 'destroy'])->name('boards.destroy');
     Route::post('/boards/{board}/categories', [BoardWebController::class, 'storeCategory'])->name('categories.store');
     Route::post('/categories/{category}/tasks', [BoardWebController::class, 'storeTask'])->name('tasks.store');
+
+    // AI Chat
+    Route::post('/ai-chat/message', [AiChatController::class, 'processMessage'])->name('ai-chat.message');
 
     // Perfil
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
