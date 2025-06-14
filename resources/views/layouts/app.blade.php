@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full">
 
 <head>
     <meta charset="utf-8">
@@ -10,7 +10,10 @@
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
+
+    <!-- Tailwind CSS (load before Bootstrap to allow our overrides to work) -->
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -24,20 +27,39 @@
     <!-- Sortable.js para drag and drop -->
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 
-    <!-- Tailwind CSS -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-
     <!-- Estilos adicionais -->
     <style>
         [x-cloak] { display: none !important; }
+        
+        /* Ensure dark mode background covers the entire page */
+        html.dark,
+        html.dark body {
+            background-color: #111827 !important;
+            color: #f9fafb !important;
+        }
+        
+        html.dark .container {
+            background-color: #111827 !important;
+        }
     </style>
+    
+    <!-- Dark mode script -->
+    <script>
+        // On page load or when changing themes, best to add inline in `head` to avoid FOUC
+        if (localStorage.getItem('darkMode') === 'true' || 
+            (!('darkMode' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+    </script>
 </head>
 
-<body class="font-sans antialiased bg-gray-50">
+<body class="font-sans antialiased bg-white dark:bg-gray-900 text-gray-900 dark:text-white min-h-screen">
     @include('layouts.navigation')
 
     <!-- Page Content -->
-    <main class="container py-6">
+    <main class="container mx-auto px-4 py-6 bg-white dark:bg-gray-900">
         @yield('content')
     </main>
     

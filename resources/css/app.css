@@ -1,3 +1,44 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Dark mode overrides */
+.dark {
+    color-scheme: dark;
+}
+
+/* Override Bootstrap styles in dark mode */
+.dark .container,
+.dark .container-fluid,
+.dark .container-lg,
+.dark .container-md,
+.dark .container-sm,
+.dark .container-xl,
+.dark .container-xxl {
+    background-color: #111827 !important; /* gray-900 */
+    color: #f9fafb !important; /* gray-50 */
+}
+
+.dark body {
+    background-color: #111827 !important; /* gray-900 */
+    color: #f9fafb !important; /* gray-50 */
+}
+
+/* Force dark mode on specific elements */
+html.dark main {
+    background-color: #111827 !important;
+}
+
+/* Improved contrast for text in dark mode */
+.dark .text-gray-600 {
+    color: #d1d5db !important; /* gray-300 */
+}
+
+.dark .text-gray-700 {
+    color: #e5e7eb !important; /* gray-200 */
+}
+
+.dark .text-gray-800, 
+.dark .text-gray-900 {
+    color: #f9fafb !important; /* gray-50 */
+}
