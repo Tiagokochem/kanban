@@ -38,6 +38,42 @@ class BoardWebController extends Controller
         return redirect()->route('boards.show', $board)->with('success', 'Quadro criado com sucesso!');
     }
 
+    public function edit(Board $board)
+    {
+        if (Auth::user()->id !== $board->user_id) {
+            abort(403, 'Unauthorized action.');
+        }
+        
+        return view('boards.edit', compact('board'));
+    }
+
+    public function update(Request $request, Board $board)
+    {
+        if (Auth::user()->id !== $board->user_id) {
+            abort(403, 'Unauthorized action.');
+        }
+        
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+        ]);
+
+        $board->update($validated);
+
+        return redirect()->route('boards.show', $board)->with('success', 'Quadro atualizado com sucesso!');
+    }
+
+    public function destroy(Board $board)
+    {
+        if (Auth::user()->id !== $board->user_id) {
+            abort(403, 'Unauthorized action.');
+        }
+        
+        // Excluir o quadro e todas as categorias e tarefas associadas
+        $board->delete();
+
+        return redirect()->route('dashboard')->with('success', 'Quadro excluído com sucesso!');
+    }
+
     public function storeCategory(Request $request, Board $board)
     {
         $request->validate([

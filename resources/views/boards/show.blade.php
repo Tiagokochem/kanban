@@ -100,6 +100,42 @@
         </div>
     </div>
 </div>
+
+{{-- Modal para editar tarefa --}}
+<div class="modal fade" id="editTaskModal" tabindex="-1" aria-labelledby="editTaskModalLabel" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="editTaskForm">
+                <input type="hidden" id="editTaskId">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editTaskModalLabel">Editar Tarefa</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar" id="closeEditTaskModalBtn"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="editTaskTitle" class="form-label">Título da Tarefa</label>
+                        <input type="text" class="form-control" id="editTaskTitle" name="title" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editTaskDescription" class="form-label">Descrição</label>
+                        <textarea class="form-control" id="editTaskDescription" name="description" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer d-flex justify-content-between">
+                    <button type="button" class="btn btn-danger btn-sm" id="deleteTaskBtn">
+                        <i class="bi bi-trash"></i> Excluir
+                    </button>
+                    <div>
+                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" id="cancelEditTaskBtn">Cancelar</button>
+                        <button type="submit" class="btn btn-primary btn-sm" id="submitEditTaskBtn">
+                            <i class="bi bi-save"></i> Salvar
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 @endsection
 
 
@@ -138,6 +174,9 @@
         const taskModalElement = document.getElementById('addTaskModal');
         const taskModal = new bootstrap.Modal(taskModalElement, modalOptions);
         
+        const editTaskModalElement = document.getElementById('editTaskModal');
+        const editTaskModal = new bootstrap.Modal(editTaskModalElement, modalOptions);
+        
         // Botões para fechar os modais
         $('#closeCategoryModalBtn, #cancelCategoryBtn').on('click', function() {
             // Remover foco antes de fechar
@@ -152,6 +191,14 @@
             $(this).blur();
             setTimeout(function() {
                 taskModal.hide();
+            }, 100);
+        });
+        
+        $('#closeEditTaskModalBtn, #cancelEditTaskBtn').on('click', function() {
+            // Remover foco antes de fechar
+            $(this).blur();
+            setTimeout(function() {
+                editTaskModal.hide();
             }, 100);
         });
         
@@ -277,11 +324,25 @@
                     tasks.forEach(task => {
                         const item = $(`
                             <li class="list-group-item mb-2 task-item" data-task-id="${task.id}">
-                                <strong>${task.title}</strong><br>
-                                <small class="text-muted">${task.description ?? ''}</small>
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <strong>${task.title}</strong><br>
+                                        <small class="text-muted">${task.description ?? ''}</small>
+                                    </div>
+                                    <button class="btn btn-sm btn-link text-primary edit-task-btn" data-task-id="${task.id}" title="Editar tarefa">
+                                        <i class="bi bi-pencil"></i>
+                                    </button>
+                                </div>
                             </li>
                         `);
                         list.append(item);
+                    });
+                    
+                    // Adicionar evento aos botões de edição de tarefa
+                    $('.edit-task-btn').on('click', function(e) {
+                        e.stopPropagation();
+                        const taskId = $(this).data('task-id');
+                        openEditTaskModal(taskId);
                     });
                 }
             }).fail(function(error) {
@@ -458,6 +519,34 @@
             }, 100);
         };
         
+        // Função para abrir o modal de edição de tarefa
+        window.openEditTaskModal = function(taskId) {
+            console.log('Abrindo modal de edição para tarefa:', taskId);
+            
+            // Buscar dados da tarefa
+            $.get(`/api/tasks/${taskId}`, function(task) {
+                console.log('Dados da tarefa recebidos:', task);
+                
+                // Preencher o formulário
+                $('#editTaskId').val(taskId);
+                $('#editTaskTitle').val(task.title);
+                $('#editTaskDescription').val(task.description);
+                
+                // Mostrar o modal com um pequeno atraso
+                setTimeout(function() {
+                    editTaskModal.show();
+                    
+                    // Focar no campo de título com um pequeno atraso
+                    setTimeout(function() {
+                        $('#editTaskTitle').focus();
+                    }, 200);
+                }, 100);
+            }).fail(function(error) {
+                console.error('Erro ao buscar dados da tarefa:', error);
+                alert('Erro ao buscar dados da tarefa.');
+            });
+        };
+        
         // Submeter tarefa
         $('#taskForm').on('submit', function(e) {
             e.preventDefault();
@@ -510,6 +599,94 @@
                 }
             });
         });
+        
+        // Submeter edição de tarefa
+        $('#editTaskForm').on('submit', function(e) {
+            e.preventDefault();
+            console.log('Form de edição de tarefa submetido');
+            
+            // Desativar o botão de submit para evitar múltiplos envios
+            $('#submitEditTaskBtn').prop('disabled', true);
+
+            const taskId = $('#editTaskId').val();
+            const title = $('#editTaskTitle').val();
+            const description = $('#editTaskDescription').val();
+            console.log('Dados da edição:', {taskId, title, description});
+
+            // Remover o foco do botão de submit antes de fechar o modal
+            document.activeElement.blur();
+            
+            $.ajax({
+                url: `/api/tasks/${taskId}`,
+                type: 'PUT',
+                data: {
+                    title: title,
+                    description: description
+                },
+                success: function(response) {
+                    console.log('Tarefa atualizada com sucesso:', response);
+                    
+                    // Remover o foco de qualquer elemento antes de fechar o modal
+                    document.activeElement.blur();
+                    
+                    // Fechar o modal com um pequeno atraso
+                    setTimeout(function() {
+                        editTaskModal.hide();
+                        
+                        // Recarregar as tarefas da categoria à qual a tarefa pertence
+                        const categoryId = response.category_id;
+                        loadTasks(categoryId);
+                        
+                        // Reativar o botão de submit
+                        $('#submitEditTaskBtn').prop('disabled', false);
+                    }, 100);
+                },
+                error: function(error) {
+                    console.error('Erro ao atualizar tarefa:', error);
+                    alert('Erro ao atualizar tarefa');
+                    
+                    // Reativar o botão de submit
+                    $('#submitEditTaskBtn').prop('disabled', false);
+                }
+            });
+        });
+        
+        // Excluir tarefa
+        $('#deleteTaskBtn').on('click', function() {
+            const taskId = $('#editTaskId').val();
+            console.log('Excluindo tarefa:', taskId);
+            
+            if (confirm('Tem certeza que deseja excluir esta tarefa? Esta ação não pode ser desfeita.')) {
+                // Desativar o botão para evitar múltiplos cliques
+                $(this).prop('disabled', true);
+                
+                $.ajax({
+                    url: `/api/tasks/${taskId}`,
+                    type: 'DELETE',
+                    success: function() {
+                        console.log('Tarefa excluída com sucesso');
+                        
+                        // Fechar o modal com um pequeno atraso
+                        setTimeout(function() {
+                            editTaskModal.hide();
+                            
+                            // Recarregar todas as categorias para garantir que tudo esteja atualizado
+                            loadCategories();
+                            
+                            // Reativar o botão
+                            $('#deleteTaskBtn').prop('disabled', false);
+                        }, 100);
+                    },
+                    error: function(error) {
+                        console.error('Erro ao excluir tarefa:', error);
+                        alert('Erro ao excluir tarefa');
+                        
+                        // Reativar o botão
+                        $('#deleteTaskBtn').prop('disabled', false);
+                    }
+                });
+            }
+        });
     });
 </script>
 
@@ -546,6 +723,16 @@
         color: #6c757d;
         text-align: center;
         cursor: default;
+    }
+    
+    .edit-task-btn {
+        opacity: 0.5;
+        padding: 0;
+        margin: 0;
+    }
+    
+    .task-item:hover .edit-task-btn {
+        opacity: 1;
     }
 </style>
 @endsection

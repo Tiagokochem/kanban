@@ -19,6 +19,13 @@ class TaskController extends Controller
         return $category->tasks()->orderBy('order')->get();
     }
 
+    public function show(Task $task)
+    {
+        $this->authorize('view', $task->category->board);
+        
+        return $task;
+    }
+
     public function store(Request $request, Category $category)
     {
         $this->authorize('update', $category->board);

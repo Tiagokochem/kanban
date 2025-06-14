@@ -24,6 +24,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/boards/create', [BoardWebController::class, 'create'])->name('boards.create');
     Route::post('/boards', [BoardWebController::class, 'store'])->name('boards.store');
     Route::get('/boards/{board}', [BoardWebController::class, 'show'])->name('boards.show');
+    Route::get('/boards/{board}/edit', [BoardWebController::class, 'edit'])->name('boards.edit');
+    Route::put('/boards/{board}', [BoardWebController::class, 'update'])->name('boards.update');
+    Route::delete('/boards/{board}', [BoardWebController::class, 'destroy'])->name('boards.destroy');
     Route::post('/boards/{board}/categories', [BoardWebController::class, 'storeCategory'])->name('categories.store');
     Route::post('/categories/{category}/tasks', [BoardWebController::class, 'storeTask'])->name('tasks.store');
 
