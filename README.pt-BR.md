@@ -4,6 +4,9 @@ Uma aplicação moderna de quadro Kanban construída com Laravel, Alpine.js e Ta
 
 *Leia em outros idiomas: [English](README.md)*
 
+Fiz um pequeno vídeo de demonstração do app segue o link https://drive.google.com/file/d/1JLQaT7pAYF-e9NcJ0x5-wfEIKDl30y3f/view?usp=sharing
+
+
 ## Índice
 
 - [Requisitos](#requisitos)
