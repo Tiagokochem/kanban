@@ -43,7 +43,7 @@ return [
     ],
 
     'groq' => [
-        'api_key' => env('GROQ_API_KEY', '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'),
+        'api_key' => env('GROQ_API_KEY', ''),
     ],
 
 ];

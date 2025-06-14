@@ -6,13 +6,13 @@
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Meus Quadros</h1>
             <div class="flex space-x-3">
-                <button id="openAiChatModal" class="inline-flex items-center px-5 py-2.5 bg-green-600 hover:bg-green-700 border border-transparent rounded-md font-medium text-sm text-white uppercase tracking-wider focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition ease-in-out duration-150 shadow-sm">
+                <button id="openAiChatModal" class="inline-flex items-center px-5 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 border border-transparent rounded-md font-medium text-sm text-white uppercase tracking-wider focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-150 shadow-sm transform hover:scale-105">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
                     </svg>
-                    AI Assistant
+                    Assistente AI
                 </button>
-                <button id="openCreateModal" class="inline-flex items-center px-5 py-2.5 bg-blue-600 hover:bg-blue-700 border border-transparent rounded-md font-medium text-sm text-white uppercase tracking-wider focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition ease-in-out duration-150 shadow-sm">
+                <button id="openCreateModal" class="inline-flex items-center px-5 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 border border-transparent rounded-md font-medium text-sm text-white uppercase tracking-wider focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-all duration-150 shadow-sm transform hover:scale-105">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                     </svg>
@@ -227,74 +227,83 @@
     <div id="aiChatModal" class="fixed inset-0 z-50 hidden overflow-y-auto" aria-labelledby="modal-title-ai-chat" role="dialog" aria-modal="true">
         <div class="flex items-center justify-center min-h-screen p-4">
             <!-- Overlay de fundo -->
-            <div class="fixed inset-0 bg-gray-500 dark:bg-gray-900 bg-opacity-75 dark:bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+            <div class="fixed inset-0 bg-gray-900 bg-opacity-80 dark:bg-black dark:bg-opacity-80 backdrop-blur-sm transition-opacity" aria-hidden="true"></div>
             
             <!-- Conteúdo do modal -->
-            <div class="relative inline-block align-bottom bg-white dark:bg-gray-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:align-middle sm:max-w-lg sm:w-full">
-                <div class="absolute top-0 right-0 pt-4 pr-4">
-                    <button type="button" id="closeAiChatModal" class="bg-white dark:bg-gray-800 rounded-md text-gray-400 hover:text-gray-500 dark:hover:text-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                        <span class="sr-only">Fechar</span>
-                        <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
-                </div>
-                <div class="px-4 pt-5 pb-4 sm:p-6 sm:pb-4 bg-white dark:bg-gray-800">
-                    <div class="sm:flex sm:items-start">
-                        <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-green-100 dark:bg-green-900 sm:mx-0 sm:h-10 sm:w-10">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600 dark:text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
-                            </svg>
-                        </div>
-                        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
-                            <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white" id="modal-title-ai-chat">
-                                AI Assistant
+            <div class="relative inline-block align-bottom bg-white dark:bg-gray-800 rounded-xl text-left overflow-hidden shadow-2xl transform transition-all sm:align-middle sm:max-w-xl sm:w-full border border-gray-200 dark:border-gray-700">
+                <!-- Header do modal -->
+                <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-600 to-indigo-700 dark:from-blue-800 dark:to-indigo-900">
+                    <div class="flex justify-between items-center">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 bg-white bg-opacity-20 rounded-full p-2 mr-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-bold text-white" id="modal-title-ai-chat">
+                                Assistente Kanban AI
                             </h3>
-                            <div class="mt-2">
-                                <p class="text-sm text-gray-500 dark:text-gray-300 mb-4">
-                                    Descreva seu projeto e tarefas, e o assistente AI irá ajudá-lo a criar um quadro Kanban.
-                                </p>
-                                
-                                <!-- Área de chat -->
-                                <div id="chat-messages" class="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 h-64 overflow-y-auto mb-4">
-                                    <div class="flex flex-col space-y-2">
-                                        <div class="flex items-start">
-                                            <div class="flex-shrink-0 bg-green-100 dark:bg-green-900 rounded-full p-2">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-600 dark:text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
-                                                </svg>
-                                            </div>
-                                            <div class="ml-3 bg-white dark:bg-gray-600 rounded-lg px-4 py-2 max-w-md">
-                                                <p class="text-sm text-gray-700 dark:text-gray-200">
-                                                    Olá! Descreva seu projeto e as tarefas que você precisa realizar. Eu posso ajudá-lo a criar um quadro Kanban automaticamente.
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
+                        </div>
+                        <button type="button" id="closeAiChatModal" class="rounded-full p-1.5 bg-white bg-opacity-20 hover:bg-opacity-30 text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-600 transition-colors duration-150">
+                            <span class="sr-only">Fechar</span>
+                            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="p-6 bg-white dark:bg-gray-800">
+                    <p class="text-sm text-gray-600 dark:text-gray-300 mb-4 italic">
+                        Descreva seu projeto e tarefas para que o assistente crie um quadro Kanban personalizado para você.
+                    </p>
+                    
+                    <!-- Área de chat -->
+                    <div id="chat-messages" class="bg-gray-50 dark:bg-gray-900 rounded-lg p-4 h-72 overflow-y-auto mb-4 border border-gray-100 dark:border-gray-700 shadow-inner">
+                        <div class="flex flex-col space-y-4">
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0 bg-gradient-to-br from-blue-500 to-indigo-600 dark:from-blue-600 dark:to-indigo-700 rounded-full p-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                                    </svg>
                                 </div>
-                                
-                                <!-- Área de resposta do AI -->
-                                <div id="ai-response-area" class="hidden bg-blue-50 dark:bg-blue-900/30 border-l-4 border-blue-400 dark:border-blue-500 p-3 rounded-md mb-4">
-                                    <h4 class="font-medium text-blue-800 dark:text-blue-200 mb-2">Sugestão do AI:</h4>
-                                    <div id="ai-suggestion" class="text-sm text-blue-700 dark:text-blue-100"></div>
-                                    <div class="mt-3 flex justify-end">
-                                        <button id="create-from-ai" class="inline-flex items-center px-3 py-1.5 bg-blue-600 hover:bg-blue-700 border border-transparent rounded-md font-medium text-xs text-white uppercase tracking-wider focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-150 shadow-sm">
-                                            Criar Quadro
-                                        </button>
-                                    </div>
-                                </div>
-                                
-                                <!-- Input de mensagem -->
-                                <div class="flex items-center">
-                                    <input type="text" id="chat-input" class="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-l-md shadow-sm placeholder-gray-400 dark:placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm" placeholder="Descreva seu projeto e tarefas...">
-                                    <button id="send-message" class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 border border-transparent rounded-r-md font-medium text-sm text-white uppercase tracking-wider focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-150 shadow-sm">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-                                        </svg>
-                                    </button>
+                                <div class="ml-3 bg-white dark:bg-gray-800 rounded-lg px-4 py-3 max-w-md shadow-sm border border-gray-100 dark:border-gray-700">
+                                    <p class="text-sm text-gray-700 dark:text-gray-200">
+                                        Olá! Descreva seu projeto e as tarefas que você precisa realizar. Eu posso ajudá-lo a criar um quadro Kanban automaticamente.
+                                    </p>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    
+                    <!-- Área de resposta do AI -->
+                    <div id="ai-response-area" class="hidden bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border border-blue-200 dark:border-blue-800 p-4 rounded-lg mb-4 shadow-sm">
+                        <h4 class="font-medium text-blue-800 dark:text-blue-300 mb-2 flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            Sugestão do AI:
+                        </h4>
+                        <div id="ai-suggestion" class="text-sm text-blue-700 dark:text-blue-200"></div>
+                        <div class="mt-4 flex justify-end">
+                            <button id="create-from-ai" class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 border border-transparent rounded-md font-medium text-sm text-white uppercase tracking-wider focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-150 shadow-sm transform hover:scale-105">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                </svg>
+                                Criar Quadro
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Input de mensagem -->
+                    <div class="flex items-center bg-gray-50 dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+                        <input type="text" id="chat-input" class="flex-1 px-4 py-3 bg-transparent border-none focus:ring-0 placeholder-gray-400 dark:placeholder-gray-500 text-gray-900 dark:text-white text-sm" placeholder="Descreva seu projeto e tarefas...">
+                        <button id="send-message" class="inline-flex items-center px-4 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-150">
+                            <span class="mr-2 hidden sm:inline">Enviar</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                            </svg>
+                        </button>
                     </div>
                 </div>
             </div>
