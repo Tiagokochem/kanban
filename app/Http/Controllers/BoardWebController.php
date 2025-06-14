@@ -90,6 +90,14 @@ class BoardWebController extends Controller
         // Excluir o quadro e todas as categorias e tarefas associadas
         $board->delete();
 
+        // Se for uma requisição AJAX, retornar JSON
+        if (request()->ajax() || request()->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Quadro excluído com sucesso!'
+            ]);
+        }
+
         return redirect()->route('dashboard')->with('success', 'Quadro excluído com sucesso!');
     }
 
