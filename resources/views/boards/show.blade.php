@@ -44,14 +44,14 @@
 </div>
 
 {{-- Modal para adicionar coluna --}}
-<div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
+<div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true" data-bs-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
             <form id="categoryForm" action="/boards/{{ $board->id }}/categories" method="POST">
                 @csrf
                 <div class="modal-header">
                     <h5 class="modal-title" id="addCategoryModalLabel">Nova Coluna</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar" id="closeCategoryModalBtn"></button>
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
@@ -60,8 +60,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-primary btn-sm">
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" id="cancelCategoryBtn">Cancelar</button>
+                    <button type="submit" class="btn btn-primary btn-sm" id="submitCategoryBtn">
                         <i class="bi bi-plus-lg"></i> Adicionar
                     </button>
                 </div>
@@ -71,14 +71,14 @@
 </div>
 
 {{-- Modal para adicionar tarefa --}}
-<div class="modal fade" id="addTaskModal" tabindex="-1" aria-labelledby="addTaskModalLabel" aria-hidden="true">
+<div class="modal fade" id="addTaskModal" tabindex="-1" aria-labelledby="addTaskModalLabel" aria-hidden="true" data-bs-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
             <form id="taskForm">
                 <input type="hidden" id="taskCategoryId">
                 <div class="modal-header">
                     <h5 class="modal-title" id="addTaskModalLabel">Nova Tarefa</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar" id="closeTaskModalBtn"></button>
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
@@ -91,8 +91,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-primary btn-sm">
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" id="cancelTaskBtn">Cancelar</button>
+                    <button type="submit" class="btn btn-primary btn-sm" id="submitTaskBtn">
                         <i class="bi bi-plus-lg"></i> Adicionar
                     </button>
                 </div>
@@ -107,6 +107,8 @@
 <script>
     // Definindo loadTasks no escopo global para poder ser acessada de qualquer lugar
     let loadTasks;
+    // Armazenar instâncias do Sortable
+    let sortableInstances = {};
     
     $(document).ready(function() {
         console.log('Document ready');
@@ -122,30 +124,71 @@
         const boardId = $('#categories').data('board-id');
         console.log('Board ID:', boardId);
         
-        // Verificar se o botão está sendo clicado
-        $('[data-bs-target="#addCategoryModal"]').on('click', function() {
-            console.log('Botão Nova Coluna clicado');
-            // Tentar abrir o modal manualmente
-            const modal = new bootstrap.Modal(document.getElementById('addCategoryModal'));
-            modal.show();
+        // Configurar os modais para resolver problemas de acessibilidade
+        const modalOptions = {
+            backdrop: 'static',
+            keyboard: false,
+            focus: false // Desativar o foco automático
+        };
+        
+        // Inicializar modais com opções personalizadas
+        const categoryModalElement = document.getElementById('addCategoryModal');
+        const categoryModal = new bootstrap.Modal(categoryModalElement, modalOptions);
+        
+        const taskModalElement = document.getElementById('addTaskModal');
+        const taskModal = new bootstrap.Modal(taskModalElement, modalOptions);
+        
+        // Botões para fechar os modais
+        $('#closeCategoryModalBtn, #cancelCategoryBtn').on('click', function() {
+            // Remover foco antes de fechar
+            $(this).blur();
+            setTimeout(function() {
+                categoryModal.hide();
+            }, 100);
         });
         
-        // Verificar todos os eventos do modal
-        $('#addCategoryModal').on('show.bs.modal', function () {
+        $('#closeTaskModalBtn, #cancelTaskBtn').on('click', function() {
+            // Remover foco antes de fechar
+            $(this).blur();
+            setTimeout(function() {
+                taskModal.hide();
+            }, 100);
+        });
+        
+        // Verificar se o botão está sendo clicado
+        $('[data-bs-target="#addCategoryModal"]').on('click', function(e) {
+            e.preventDefault();
+            console.log('Botão Nova Coluna clicado');
+            
+            // Limpar o formulário
+            $('#categoryName').val('');
+            
+            // Mostrar o modal com um pequeno atraso
+            setTimeout(function() {
+                categoryModal.show();
+            }, 100);
+        });
+        
+        // Eventos do modal de categoria
+        $(categoryModalElement).on('show.bs.modal', function () {
             console.log('Modal de categoria: evento show');
         });
         
-        $('#addCategoryModal').on('shown.bs.modal', function () {
+        $(categoryModalElement).on('shown.bs.modal', function () {
             console.log('Modal de categoria: evento shown');
-            // Focar no campo de nome
-            $('#categoryName').focus();
+            // Focar no campo de nome com um pequeno atraso
+            setTimeout(function() {
+                $('#categoryName').focus();
+            }, 200);
         });
         
-        $('#addCategoryModal').on('hide.bs.modal', function () {
+        $(categoryModalElement).on('hide.bs.modal', function () {
             console.log('Modal de categoria: evento hide');
+            // Remover o foco antes de fechar o modal
+            document.activeElement.blur();
         });
         
-        $('#addCategoryModal').on('hidden.bs.modal', function () {
+        $(categoryModalElement).on('hidden.bs.modal', function () {
             console.log('Modal de categoria: evento hidden');
         });
         
@@ -176,16 +219,16 @@
 
                 categories.forEach(category => {
                     const column = $(`
-                        <div class="col-md-4">
-                            <div class="card shadow-sm border-0 mb-4">
+                        <div class="col-md-4 mb-4">
+                            <div class="card shadow-sm border-0 h-100">
                                 <div class="card-header bg-primary text-white fw-semibold d-flex justify-content-between align-items-center">
                                     ${category.name}
-                                    <button class="btn btn-light btn-sm" onclick="openTaskModal(${category.id})" title="Nova Tarefa">
+                                    <button class="btn btn-light btn-sm task-add-btn" data-category-id="${category.id}" title="Nova Tarefa">
                                         <i class="bi bi-plus-lg"></i>
                                     </button>
                                 </div>
                                 <div class="card-body">
-                                    <ul class="list-group task-list" id="category-${category.id}">
+                                    <ul class="list-group task-list" id="category-${category.id}" data-category-id="${category.id}">
                                         <!-- As tarefas irão aqui -->
                                     </ul>
                                 </div>
@@ -197,6 +240,12 @@
 
                     loadTasks(category.id);
                 });
+                
+                // Adicionar evento aos botões de nova tarefa
+                $('.task-add-btn').on('click', function() {
+                    const categoryId = $(this).data('category-id');
+                    openTaskModal(categoryId);
+                });
             }).fail(function(error) {
                 console.error('Erro ao carregar categorias:', error);
             });
@@ -206,32 +255,144 @@
         loadTasks = function(categoryId) {
             console.log('Carregando tarefas para categoria:', categoryId);
             $.get(`/api/categories/${categoryId}/tasks`, function(tasks) {
-                console.log('Tarefas recebidas:', tasks);
+                console.log('Tarefas recebidas para categoria', categoryId, ':', tasks);
                 const list = $(`#category-${categoryId}`);
                 list.empty();
 
-                if (tasks.length === 0) {
-                    list.append(`<li class="list-group-item text-muted fst-italic">Nenhuma tarefa</li>`);
-                }
+                // Sempre inicializar o Sortable, mesmo sem tarefas
+                const sortable = initSortable(categoryId);
 
-                tasks.forEach(task => {
-                    const item = $(`
-                        <li class="list-group-item mb-2">
-                            <strong>${task.title}</strong><br>
-                            <small class="text-muted">${task.description ?? ''}</small>
+                if (!tasks || tasks.length === 0) {
+                    // Adicionar um placeholder que não é arrastável
+                    list.append(`
+                        <li class="list-group-item text-muted fst-italic empty-message" id="empty-${categoryId}">
+                            Nenhuma tarefa
                         </li>
                     `);
-                    list.append(item);
-                });
+                } else {
+                    // Remover qualquer mensagem de "Nenhuma tarefa" se existir
+                    $(`#empty-${categoryId}`).remove();
+                    
+                    // Adicionar as tarefas à lista
+                    tasks.forEach(task => {
+                        const item = $(`
+                            <li class="list-group-item mb-2 task-item" data-task-id="${task.id}">
+                                <strong>${task.title}</strong><br>
+                                <small class="text-muted">${task.description ?? ''}</small>
+                            </li>
+                        `);
+                        list.append(item);
+                    });
+                }
             }).fail(function(error) {
                 console.error('Erro ao carregar tarefas:', error);
             });
         };
+        
+        // Função para inicializar o Sortable em uma lista de tarefas
+        function initSortable(categoryId) {
+            const el = document.getElementById(`category-${categoryId}`);
+            
+            // Destruir instância anterior se existir
+            if (sortableInstances[categoryId]) {
+                sortableInstances[categoryId].destroy();
+            }
+            
+            // Criar nova instância do Sortable
+            sortableInstances[categoryId] = new Sortable(el, {
+                group: 'tasks', // Permite arrastar entre listas com o mesmo grupo
+                animation: 150,
+                ghostClass: 'bg-light', // Classe aplicada ao item fantasma durante o arraste
+                chosenClass: 'bg-info', // Classe aplicada ao item escolhido
+                dragClass: 'sortable-drag', // Classe aplicada ao item durante o arraste
+                filter: '.empty-message', // Não permitir arrastar mensagens de "Nenhuma tarefa"
+                onStart: function(evt) {
+                    // Remover mensagens de "Nenhuma tarefa" de todas as listas
+                    $('.empty-message').hide();
+                },
+                onEnd: function(evt) {
+                    const taskId = evt.item.getAttribute('data-task-id');
+                    const fromCategoryId = evt.from.getAttribute('data-category-id');
+                    const toCategoryId = evt.to.getAttribute('data-category-id');
+                    const newIndex = evt.newIndex;
+                    
+                    console.log(`Tarefa ${taskId} movida da categoria ${fromCategoryId} para ${toCategoryId}, nova posição: ${newIndex}`);
+                    
+                    // Verificar se a lista de origem ficou vazia
+                    if (evt.from.children.length === 0 || 
+                        (evt.from.children.length === 1 && evt.from.children[0].classList.contains('empty-message'))) {
+                        // Adicionar mensagem de "Nenhuma tarefa" à lista de origem
+                        $(evt.from).append(`
+                            <li class="list-group-item text-muted fst-italic empty-message" id="empty-${fromCategoryId}">
+                                Nenhuma tarefa
+                            </li>
+                        `);
+                    }
+                    
+                    // Remover mensagem de "Nenhuma tarefa" da lista de destino se existir
+                    $(`#empty-${toCategoryId}`).remove();
+                    
+                    // Se a tarefa foi movida para outra categoria
+                    if (fromCategoryId !== toCategoryId) {
+                        moveTask(taskId, toCategoryId, newIndex);
+                    } else if (evt.oldIndex !== evt.newIndex) {
+                        // Se a tarefa foi apenas reordenada na mesma categoria
+                        updateTaskOrder(taskId, toCategoryId, newIndex);
+                    }
+                    
+                    // Mostrar novamente as mensagens de "Nenhuma tarefa" que foram escondidas
+                    $('.empty-message').show();
+                }
+            });
+            
+            return sortableInstances[categoryId];
+        }
+        
+        // Função para mover uma tarefa para outra categoria
+        function moveTask(taskId, categoryId, order) {
+            $.ajax({
+                url: `/api/tasks/${taskId}/move`,
+                type: 'POST',
+                data: {
+                    category_id: categoryId,
+                    order: order
+                },
+                success: function(response) {
+                    console.log('Tarefa movida com sucesso:', response);
+                },
+                error: function(error) {
+                    console.error('Erro ao mover tarefa:', error);
+                    alert('Erro ao mover tarefa. A página será recarregada.');
+                    loadCategories(); // Recarregar tudo em caso de erro
+                }
+            });
+        }
+        
+        // Função para atualizar a ordem de uma tarefa na mesma categoria
+        function updateTaskOrder(taskId, categoryId, order) {
+            $.ajax({
+                url: `/api/tasks/${taskId}`,
+                type: 'PUT',
+                data: {
+                    order: order
+                },
+                success: function(response) {
+                    console.log('Ordem da tarefa atualizada com sucesso:', response);
+                },
+                error: function(error) {
+                    console.error('Erro ao atualizar ordem da tarefa:', error);
+                    loadTasks(categoryId); // Recarregar apenas esta categoria em caso de erro
+                }
+            });
+        }
 
         // Interceptar o envio do formulário tradicional para fazer via AJAX
         $('#categoryForm').on('submit', function(e) {
             e.preventDefault();
             console.log('Form de categoria submetido via evento submit');
+            
+            // Desativar o botão de submit para evitar múltiplos envios
+            $('#submitCategoryBtn').prop('disabled', true);
             
             const form = $(this);
             const url = form.attr('action');
@@ -240,66 +401,151 @@
             console.log('URL:', url);
             console.log('Form data:', formData);
             
+            // Remover o foco do botão de submit antes de fechar o modal
+            document.activeElement.blur();
+            
             $.ajax({
                 url: url,
                 type: 'POST',
                 data: formData,
                 success: function(response) {
                     console.log('Categoria criada com sucesso:', response);
-                    const modal = bootstrap.Modal.getInstance(document.getElementById('addCategoryModal'));
-                    modal.hide();
-                    $('#categoryName').val('');
-                    loadCategories();
+                    
+                    // Remover o foco de qualquer elemento antes de fechar o modal
+                    document.activeElement.blur();
+                    
+                    // Fechar o modal com um pequeno atraso
+                    setTimeout(function() {
+                        categoryModal.hide();
+                        
+                        // Limpar o formulário
+                        $('#categoryName').val('');
+                        
+                        // Recarregar as categorias
+                        loadCategories();
+                        
+                        // Reativar o botão de submit
+                        $('#submitCategoryBtn').prop('disabled', false);
+                    }, 100);
                 },
                 error: function(error) {
                     console.error('Erro ao criar coluna:', error);
                     alert('Erro ao criar coluna. Verifique o console para detalhes.');
+                    
+                    // Reativar o botão de submit
+                    $('#submitCategoryBtn').prop('disabled', false);
+                }
+            });
+        });
+        
+        // Função para abrir o modal de nova tarefa
+        window.openTaskModal = function(categoryId) {
+            console.log('Abrindo modal de tarefa para categoria:', categoryId);
+            
+            // Limpar o formulário
+            $('#taskCategoryId').val(categoryId);
+            $('#taskTitle').val('');
+            $('#taskDescription').val('');
+            
+            // Mostrar o modal com um pequeno atraso
+            setTimeout(function() {
+                taskModal.show();
+                
+                // Focar no campo de título com um pequeno atraso
+                setTimeout(function() {
+                    $('#taskTitle').focus();
+                }, 200);
+            }, 100);
+        };
+        
+        // Submeter tarefa
+        $('#taskForm').on('submit', function(e) {
+            e.preventDefault();
+            console.log('Form de tarefa submetido');
+            
+            // Desativar o botão de submit para evitar múltiplos envios
+            $('#submitTaskBtn').prop('disabled', true);
+
+            const categoryId = $('#taskCategoryId').val();
+            const title = $('#taskTitle').val();
+            const description = $('#taskDescription').val();
+            console.log('Dados da tarefa:', {categoryId, title, description});
+
+            // Remover o foco do botão de submit antes de fechar o modal
+            document.activeElement.blur();
+            
+            // Usando a rota web para criar tarefa
+            console.log('Enviando requisição para:', `/categories/${categoryId}/tasks`);
+            $.ajax({
+                url: `/categories/${categoryId}/tasks`,
+                type: 'POST',
+                data: {
+                    title: title,
+                    description: description,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    console.log('Tarefa criada com sucesso:', response);
+                    
+                    // Remover o foco de qualquer elemento antes de fechar o modal
+                    document.activeElement.blur();
+                    
+                    // Fechar o modal com um pequeno atraso
+                    setTimeout(function() {
+                        taskModal.hide();
+                        
+                        // Recarregar as tarefas
+                        loadTasks(categoryId);
+                        
+                        // Reativar o botão de submit
+                        $('#submitTaskBtn').prop('disabled', false);
+                    }, 100);
+                },
+                error: function(error) {
+                    console.error('Erro ao criar tarefa:', error);
+                    alert('Erro ao criar tarefa');
+                    
+                    // Reativar o botão de submit
+                    $('#submitTaskBtn').prop('disabled', false);
                 }
             });
         });
     });
-
-    // Abrir modal de nova tarefa passando categoryId
-    function openTaskModal(categoryId) {
-        console.log('Abrindo modal de tarefa para categoria:', categoryId);
-        $('#taskCategoryId').val(categoryId);
-        $('#taskTitle').val('');
-        $('#taskDescription').val('');
-        $('#addTaskModal').modal('show');
-    }
-
-    // Submeter tarefa
-    $('#taskForm').submit(function(e) {
-        e.preventDefault();
-        console.log('Form de tarefa submetido');
-
-        const categoryId = $('#taskCategoryId').val();
-        const title = $('#taskTitle').val();
-        const description = $('#taskDescription').val();
-        console.log('Dados da tarefa:', {categoryId, title, description});
-
-        // Usando a rota web para criar tarefa
-        console.log('Enviando requisição para:', `/categories/${categoryId}/tasks`);
-        $.ajax({
-            url: `/categories/${categoryId}/tasks`,
-            type: 'POST',
-            data: {
-                title: title,
-                description: description,
-                _token: '{{ csrf_token() }}'
-            },
-            success: function(response) {
-                console.log('Tarefa criada com sucesso:', response);
-                const taskModal = bootstrap.Modal.getInstance(document.getElementById('addTaskModal'));
-                taskModal.hide();
-
-                loadTasks(categoryId);
-            },
-            error: function(error) {
-                console.error('Erro ao criar tarefa:', error);
-                alert('Erro ao criar tarefa');
-            }
-        });
-    });
 </script>
+
+<style>
+    /* Estilos para o drag and drop */
+    .task-item {
+        cursor: grab;
+        transition: background-color 0.2s, transform 0.1s;
+        border-radius: 4px;
+    }
+    
+    .task-item:hover {
+        background-color: #f8f9fa;
+    }
+    
+    .sortable-drag {
+        opacity: 0.8;
+        transform: scale(0.95);
+    }
+    
+    .sortable-ghost {
+        opacity: 0.4;
+        background-color: #e9ecef !important;
+    }
+    
+    .task-list {
+        min-height: 50px;
+        padding: 10px 0;
+    }
+    
+    .empty-message {
+        border: 1px dashed #ced4da;
+        background-color: #f8f9fa;
+        color: #6c757d;
+        text-align: center;
+        cursor: default;
+    }
+</style>
 @endsection

@@ -20,6 +20,8 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
+    <!-- Sortable.js para drag and drop -->
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 
     <!-- Tailwind (opcional, se quiser manter Breeze padrão) -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
