@@ -89,7 +89,7 @@ If you prefer to run the application without Docker:
 
 1. Clone the repository:
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/Tiagokochem/kanban
    cd kanban-app
    ```
 

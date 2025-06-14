@@ -33,7 +33,7 @@ Este projeto utiliza Laravel Sail para containerização Docker, tornando fácil
 
 1. Clone o repositório:
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/Tiagokochem/kanban
    cd kanban-app
    ```
 
