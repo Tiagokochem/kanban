@@ -7,7 +7,7 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
@@ -29,6 +29,10 @@
             display: flex;
             align-items: center;
             justify-content: center;
+        }
+        .login-form.dark {
+            background-color: #1f2937;
+            color: white;
         }
         .login-banner {
             width: 50%;
@@ -69,10 +73,15 @@
             border: 1px solid #e5e7eb;
             border-radius: 8px;
         }
+        .dark .form-input {
+            background-color: #374151;
+            border-color: #4b5563;
+            color: white;
+        }
         .form-button {
             width: 100%;
             padding: 12px;
-            background-color: #4f46e5;
+            background-color: #3b82f6;
             color: white;
             border: none;
             border-radius: 8px;
@@ -80,11 +89,14 @@
             cursor: pointer;
         }
         .form-button:hover {
-            background-color: #4338ca;
+            background-color: #2563eb;
         }
         .form-link {
-            color: #4f46e5;
+            color: #3b82f6;
             text-decoration: none;
+        }
+        .dark .form-link {
+            color: #60a5fa;
         }
         .form-link:hover {
             text-decoration: underline;
@@ -105,7 +117,7 @@
 </head>
 <body>
     <div class="login-container">
-        <div class="login-form">
+        <div class="login-form dark">
             <div class="form-container">
                 <h2 style="text-align: center; font-size: 24px; font-weight: bold; margin-bottom: 30px;">Log in</h2>
                 
@@ -116,7 +128,7 @@
                         <label for="email" style="display: block; margin-bottom: 5px;">Email</label>
                         <input id="email" class="form-input" type="email" name="email" value="{{ old('email') }}" required autofocus autocomplete="username" placeholder="user name">
                         @error('email')
-                            <span style="color: red; font-size: 14px;">{{ $message }}</span>
+                            <span style="color: #f87171; font-size: 14px;">{{ $message }}</span>
                         @enderror
                     </div>
                     
@@ -124,7 +136,7 @@
                         <label for="password" style="display: block; margin-bottom: 5px;">Password</label>
                         <input id="password" class="form-input" type="password" name="password" required autocomplete="current-password" placeholder="password">
                         @error('password')
-                            <span style="color: red; font-size: 14px;">{{ $message }}</span>
+                            <span style="color: #f87171; font-size: 14px;">{{ $message }}</span>
                         @enderror
                     </div>
                     
