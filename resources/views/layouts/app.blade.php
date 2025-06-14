@@ -55,11 +55,11 @@
     </script>
 </head>
 
-<body class="font-sans antialiased bg-white dark:bg-gray-900 text-gray-900 dark:text-white min-h-screen">
+<body class="font-sans antialiased dark:bg-gray-900 text-gray-900 dark:text-white min-h-screen">
     @include('layouts.navigation')
 
     <!-- Page Content -->
-    <main class="container mx-auto px-4 py-6 bg-white dark:bg-gray-900">
+    <main class="container mx-auto px-4 py-6 dark:bg-gray-900">
         @yield('content')
     </main>
     
